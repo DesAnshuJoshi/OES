@@ -23,9 +23,15 @@
 	<link rel="stylesheet" href="{{ asset('vendor/nouislider/nouislider.min.css') }}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/multiselect-dropdown.js') }}"></script>
 	
 	<!-- Style css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <style>
+        .multiselect-dropdown{
+            width: 100% !important;
+        }
+    </style>
 	
 </head>
 <body>

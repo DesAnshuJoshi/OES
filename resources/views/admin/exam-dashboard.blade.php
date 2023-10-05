@@ -63,6 +63,7 @@
                                         <th>Date</th>
                                         <th>Time</th>
                                         <th>Attempt</th>
+                                        <th>Add Questions</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -77,6 +78,9 @@
                                             <td>{{ $exam->date }}</td>
                                             <td>{{ $exam->time }} Hrs</td>
                                             <td>{{ $exam->attempt }} Time(s)</td>
+                                            <td>
+                                                <a href="#" data-id="{{ $exam->id }}" data-bs-toggle="modal" data-bs-target="#addQnaModal">Add Questions</a>
+                                            </td>
                                             <td>
                                                 <div class="d-flex">
                                                     <button class="btn btn-primary shadow btn-xs sharp me-1 editButton" data-bs-toggle="modal" data-bs-target="#editExamModal" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name}}"><i class="fas fa-pencil-alt"></i></button>
@@ -148,6 +152,36 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary light" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-danger">Delete</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal Add Exam -->
+                    <div class="modal fade" id="addQnaModal" tabindex="-1" aria-labelledby="addQnaModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <form action="" id="addQna">
+                                    @csrf
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addQnaModalLabel">Add Q&A</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="exam_id" id="addExamId">
+                                        <select class="multiselect-dropdown" name="questions" multiple multiselect-search="true" multiselect-select-all="true" onchange="console.log(this.selectedOptions)">
+                                            <option>India</option>
+                                            <option>Pakistan</option>
+                                            <option>China</option>
+                                            <option>Australlia</option>
+                                            <option>Canada</option>
+                                            <option>Japan</option>
+                                            <option>USA</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Add Q&A</button>
                                     </div>
                                 </form>
                             </div>
