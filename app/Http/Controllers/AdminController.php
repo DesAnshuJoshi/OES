@@ -7,9 +7,16 @@ use App\Models\Subject;
 use App\Models\Exam;
 use App\Models\Question;
 use App\Models\Answer;
+use App\Models\User;
 
 use App\Imports\QnaImport;
 use Maatwebsite\Excel\Facades\Excel;
+
+use Illuminate\Support\Facades\Hash;
+// use Mail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 class AdminController extends Controller
 {
@@ -245,6 +252,82 @@ class AdminController extends Controller
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
 
+    }
+
+    public function studentDashboard()
+    {
+        $student = User::where('is_admin',0)->get();
+        return view('admin.studentDashboard', compact('student'));
+    }
+
+    public function addStudent(Request $request)
+    {
+        try{
+
+            $password = Str::random(8);
+
+            User::insert([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($password)
+            ]);
+
+            $url = URL::to('/');
+
+            $data['url'] = $url;
+            $data['name'] = $request->name;
+            $data['email'] = $request->email;
+            $data['password'] = $password;
+            $data['title'] = "Student Registeration on EduTestify";
+
+            Mail::send('registerationMail',['data'=>$data],function($message) use ($data){
+                $message->to($data['email'])->subject($data['title']);
+            });
+            return response()->json(['success'=>true,'msg'=>'Student Saved Successfully!']);
+
+        }catch(\Exception $e){
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function editStudent(Request $request)
+    {
+        try{
+
+            $user = User::find($request->id);
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+
+            $url = URL::to('/');
+
+            $data['url'] = $url;
+            $data['name'] = $request->name;
+            $data['email'] = $request->email;
+            $data['title'] = "Updated Student Profile on OES";
+
+            Mail::send('updateProfileMail',['data'=>$data],function($message) use ($data){
+                $message->to($data['email'])->subject($data['title']);
+            });
+            return response()->json(['success'=>true,'msg'=>'Student Updated Successfully!']);
+
+        }catch(\Exception $e){
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function deleteStudent(Request $request)
+    {
+        try {
+            
+            User::where('id',$request->id)->delete();
+            // ExamPayments::where('user_id',$request->id)->delete();
+            return response()->json(['success'=>true,'msg'=>'Student Deleted successfully!']);
+
+        }catch(\Exception $e){
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
     }
 
 }

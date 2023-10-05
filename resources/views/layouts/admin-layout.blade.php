@@ -145,6 +145,12 @@
 						</a>
                     </li>
 
+                    <li><a class="" href="/admin/students" aria-expanded="false">
+						<i class="fas fa-graduation-cap"></i>
+							<span class="nav-text">Students</span>
+						</a>
+                    </li>
+
                     <li><a class="" href="/logout" aria-expanded="false">
 						<i class="fas fa-sign-out-alt"></i>
 							<span class="nav-text">Logout</span>
