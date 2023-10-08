@@ -66,6 +66,12 @@ Route::group(['middleware'=>['web', 'checkAdmin']], function(){
     Route::post('/admin/add-student', [AdminController::class, 'addStudent'])->name('addStudent');
     Route::post('/admin/edit-student', [AdminController::class, 'editStudent'])->name('editStudent');
     Route::post('/admin/delete-student', [AdminController::class, 'deleteStudent'])->name('deleteStudent');
+
+    //Questions Add
+    Route::get('/get-questions',[AdminController::class,'getQuestions'])->name('getQuestions');
+    Route::post('/add-questions',[AdminController::class,'addQuestions'])->name('addQuestions');
+    Route::get('/get-exam-questions',[AdminController::class,'getExamQuestions'])->name('getExamQuestions');
+    Route::get('/delete-exam-questions',[AdminController::class,'deleteExamQuestions'])->name('deleteExamQuestions');
 });
 
 Route::group(['middleware'=>['web', 'checkStudent']], function(){

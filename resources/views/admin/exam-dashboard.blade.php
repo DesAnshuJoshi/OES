@@ -64,6 +64,7 @@
                                         <th>Time</th>
                                         <th>Attempt</th>
                                         <th>Add Questions</th>
+                                        <th>See Questions</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -79,7 +80,10 @@
                                             <td>{{ $exam->time }} Hrs</td>
                                             <td>{{ $exam->attempt }} Time(s)</td>
                                             <td>
-                                                <a href="#" data-id="{{ $exam->id }}" data-bs-toggle="modal" data-bs-target="#addQnaModal">Add Questions</a>
+                                                <a href="#" class="addQuestions" data-id="{{ $exam->id }}" data-bs-toggle="modal" data-bs-target="#addQnaModal">Add Questions</a>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="seeQuestions" data-id="{{ $exam->id }}" data-bs-toggle="modal" data-bs-target="#seeQnaModal">See Questions</a>
                                             </td>
                                             <td>
                                                 <div class="d-flex">
@@ -157,31 +161,62 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Modal Add Exam -->
+                    <!-- Modal Add Exam Questions -->
                     <div class="modal fade" id="addQnaModal" tabindex="-1" aria-labelledby="addQnaModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <form action="" id="addQna">
                                     @csrf
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="addQnaModalLabel">Add Q&A</h5>
+                                        <h5 class="modal-title" id="addQnaModalLabel">Assign Questions</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <input type="hidden" name="exam_id" id="addExamId">
-                                        <select class="multiselect-dropdown" name="questions" multiple multiselect-search="true" multiselect-select-all="true" onchange="console.log(this.selectedOptions)">
-                                            <option>India</option>
-                                            <option>Pakistan</option>
-                                            <option>China</option>
-                                            <option>Australlia</option>
-                                            <option>Canada</option>
-                                            <option>Japan</option>
-                                            <option>USA</option>
-                                        </select>
+                                        <input type="search" name="search" id="search" onkeyup="searchTable()" class="form-control input-default" placeholder="Search here">
+                                        <br>
+                                        <div style="max-height: 300px; overflow-y: auto;">
+                                            <table class="table table-responsive-sm" id="questionsTable">
+                                                <thead>
+                                                    <th class="fw-bold">Select</th>
+                                                    <th class="fw-bold">Question</th>
+                                                </thead>
+                                                <tbody class="addBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-primary">Add Q&A</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal See Assigned Questions -->
+                    <div class="modal fade" id="seeQnaModal" tabindex="-1" aria-labelledby="seeQnaModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="seeQnaModalLabel">See Questions</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div style="max-height: 300px; overflow-y: auto;">
+                                            <table class="table table-responsive-sm" id="questionsTable">
+                                                <thead>
+                                                    <th class="fw-bold">#</th>
+                                                    <th class="fw-bold">Question</th>
+                                                    <th class="fw-bold">Delete</th>
+                                                </thead>
+                                                <tbody class="seeBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
@@ -307,6 +342,153 @@
                 }
             });
         });
+
+
+        // Qna Exam Question Section
+        $(document).on('click', '.addQuestions', function () {
+            var id = $(this).data('id');
+            $('#addExamId').val(id);
+
+            $.ajax({
+                url: "{{ route('getQuestions') }}",
+                type: "GET",
+                data: { exam_id: id },
+                success: function (data) {
+                    if (data.success == true) {
+                        var questions = data.data;
+                        var html = '';
+                        if (questions.length > 0) {
+                            for (let i = 0; i < questions.length; i++) {
+                                html += `
+                                    <tr>
+                                        <td><input type="checkbox" value="` + questions[i]['id'] + `" name="questions_ids[]"></td>
+                                        <td>` + questions[i]['questions'] + `</td>
+                                    </tr>
+                                `;
+                            }
+                        } else {
+                            html += `
+                                <tr>
+                                    <td colspan="2">Questions not Available!</td>
+                                </tr>`;
+                        }
+
+                        $('.addBody').html(html);
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
+
+
+        $("#addQna").submit(function(e){
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('addQuestions') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+                    if(data.success == true){
+                        location.reload();
+                    }
+                    else{
+                        alert(data.msg);
+                    }
+                }
+            });
+
+        });
+        
+        //see questions
+        $(document).on('click', '.seeQuestions', function () {
+        // $('.seeQuestions').click(function(){
+            var id = $(this).data('id');
+
+            $.ajax({
+                url:"{{ route('getExamQuestions') }}",
+                type:"GET",
+                data:{exam_id:id},
+                success:function(data){
+                    console.log(data);
+
+                    var html = '';
+                    var questions = data.data;
+                    if(questions.length > 0){
+
+                        for(let i = 0; i < questions.length; i++){
+                            html +=`
+                                <tr>
+                                    <td>`+(i+1)+`</td>
+                                    <td>`+questions[i]['question'][0]['question']+`</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <button class="btn btn-danger shadow btn-xs sharp deleteQuestion" data-id="`+questions[i]['id']+`"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+
+                    }
+                    else{
+                        html +=`
+                            <tr>
+                                <td colspan="1">Questions not available!</td>
+                            </tr>
+                        `;
+                    }
+                    $('.seeBody').html(html);
+                }
+            });
+        });
+
+        //delete question
+        $(document).on('click','.deleteQuestion',function(){
+            var id = $(this).data('id');
+            var obj = $(this);
+            $.ajax({
+                url:"{{ route('deleteExamQuestions') }}",
+                type:"GET",
+                data:{id:id},
+                success:function(data){
+                    if(data.success == true){
+                        // obj.parent().parent().remove();
+                        location.reload();
+                    }
+                    else{
+                        alert(data.msg);
+                    }
+                }
+            })
+
+            });
+
     });
+</script>
+<script>
+    function searchTable()
+    {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById('search');
+        filter = input.value.toUpperCase();
+        table = document.getElementById('questionsTable');
+        tr = table.getElementsByTagName("tr");
+        for(i = 0; i < tr.length; i++){
+            td = tr[i].getElementsByTagName("td")[1];
+            if(td){
+                txtValue = td.textContent || td.innerText;
+                if(txtValue.toUpperCase().indexOf(filter) > -1){
+                    tr[i].style.display = "";
+                }
+                else{
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
 @endsection
