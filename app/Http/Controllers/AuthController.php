@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Exam;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Hash;
 
@@ -90,7 +91,9 @@ class AuthController extends Controller
 
     public function loadDashboard()
     {
-        return view('student.dashboard');
+        $exams = Exam::with('subjects')->orderBy('date','DESC')->get();
+        //where('plan',0)->
+        return view('student.dashboard',['exams'=>$exams]);
     }
 
     public function adminDashboard()

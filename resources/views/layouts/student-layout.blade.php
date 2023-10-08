@@ -23,15 +23,9 @@
 	<link rel="stylesheet" href="{{ asset('vendor/nouislider/nouislider.min.css') }}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/multiselect-dropdown.js') }}"></script>
 	
 	<!-- Style css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <style>
-        .multiselect-dropdown{
-            width: 100% !important;
-        }
-    </style>
 	
 </head>
 <body>
@@ -66,7 +60,7 @@
 				</svg>
 				<div class="brand-title">
 					<h2 class="">EduTestify</h2>
-					<span class="brand-sub-title">@&nbsp;{{ Auth::user()->name }}</span>
+					<span class="brand-sub-title">@username</span>
 				</div>
             </a>
             <div class="nav-control">
@@ -88,7 +82,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Admin Dashboard
+                                Student Dashboard
                             </div>
                         </div>
                         <ul class="navbar-nav header-right">
@@ -133,11 +127,6 @@
         <div class="dlabnav">
             <div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-                    <li><a class="" href="/admin/dashboard" aria-expanded="false">
-							<i class="fas fa-book"></i>
-							<span class="nav-text">Subject</span>
-						</a>
-                    </li>
 					
                     <li><a class="" href="/admin/exam" aria-expanded="false">
 						<i class="fas fa-clipboard-check"></i>
@@ -145,17 +134,7 @@
 						</a>
                     </li>
 
-                    <li><a class="" href="/admin/qna" aria-expanded="false">
-						<i class="fas fa-clipboard-list"></i>
-							<span class="nav-text">Questions</span>
-						</a>
-                    </li>
-
-                    <li><a class="" href="/admin/students" aria-expanded="false">
-						<i class="fas fa-graduation-cap"></i>
-							<span class="nav-text">Students</span>
-						</a>
-                    </li>
+                    
 
                     <li><a class="" href="/logout" aria-expanded="false">
 						<i class="fas fa-sign-out-alt"></i>
