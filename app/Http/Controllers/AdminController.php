@@ -143,7 +143,7 @@ class AdminController extends Controller
                     $is_correct = 1;
                 }
                 Answer::insert([
-                    'question_id' => $questionId,
+                    'questions_id' => $questionId,
                     'answer' => $answer,
                     'is_correct' => $is_correct
                 ]);
@@ -193,7 +193,7 @@ class AdminController extends Controller
 
                     Answer::where('id',$key)
                     ->update([
-                        'question_id' => $request->question_id,
+                        'questions_id' => $request->question_id,
                         'answer' => $value,
                         'is_correct' => $edit_is_correct
                     ]);
@@ -213,7 +213,7 @@ class AdminController extends Controller
                     }
 
                     Answer::insert([
-                        'question_id' => $request->question_id,
+                        'questions_id' => $request->question_id,
                         'answer' => $answer,
                         'is_correct' => $edit_is_correct
                     ]);
@@ -235,7 +235,7 @@ class AdminController extends Controller
     {
         try{
             Question::where('id',$request->id)->delete();
-            Answer::where('question_id',$request->id)->delete();
+            Answer::where('questions_id',$request->id)->delete();
             
             return response()->json(['success'=>true, 'msg'=>"Exam Deleted Successfully!"]); 
 
