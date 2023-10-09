@@ -20,7 +20,7 @@
                                 <th>Exam Name</th>
                                 <th>Subject Name</th>
                                 <th>Date</th>
-                                <th>Time date</th>
+                                <th>Time</th>
                                 <th>Your Attempts</th>
                                 <th>Total Attempts</th>
                                 <th>Copy Link</th>
@@ -31,13 +31,14 @@
                             @php $count = 1; @endphp
                             @foreach ($exams as $exam)
                                 <tr>
+                                    <td style="display: none;">{{ $exam->id }}</td>
                                     <td>{{ $count++ }}</td>
                                     <td>{{ $exam->exam_name }}</td>
                                     <td>{{ $exam->subjects[0]['subject'] }}</td>
                                     <td>{{ $exam->date }}</td>
-                                    <td>{{ $exam->time }} Hrs</td>
+                                    <td>{{ $exam->time }} Mins</td>
+                                    <td>{{ $exam->attempt_counter }}</td>
                                     <td>{{ $exam->attempt }} Time(s)</td>
-                                    <td></td>
                                     <td><a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a></td>
                                 </tr>  
                             @endforeach
