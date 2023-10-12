@@ -145,9 +145,21 @@
 						</a>
                     </li>
 
+					<li><a class="" href="/admin/marks" aria-expanded="false">
+						<i class="fas fa-check"></i>
+							<span class="nav-text">Marks</span>
+						</a>
+                    </li>
+
                     <li><a class="" href="/admin/qna" aria-expanded="false">
 						<i class="fas fa-clipboard-list"></i>
 							<span class="nav-text">Questions</span>
+						</a>
+                    </li>
+
+					<li><a class="" href="/admin/review-exams" aria-expanded="false">
+						<i class="fas fa-eye"></i>
+							<span class="nav-text">Review Exams</span>
 						</a>
                     </li>
 
