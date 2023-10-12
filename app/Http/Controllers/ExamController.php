@@ -18,7 +18,7 @@ class ExamController extends Controller
         if(count($qnaExam) > 0){
             $attemptCount = ExamAttempt::where(['exam_id'=>$qnaExam[0]['id'],'user_id'=> auth()->user()->id])->count();
             if($attemptCount >= $qnaExam[0]['attempt']){
-                return view('student.exam-dashboard',['success'=>false,'msg'=>'Your exam Attemption has been completed','exam'=>$qnaExam]);
+                return view('student.exam-dashboard',['success'=>false,'msg'=>'You have attempted maximum times!','exam'=>$qnaExam]);
             }
             else if($qnaExam[0]['date'] == date('Y-m-d')){
                 
@@ -29,7 +29,7 @@ class ExamController extends Controller
 
                 }
                 else{
-                    return view('student.exam-dashboard',['success'=>false,'msg'=>'This exam is not available for now!','exam'=>$qnaExam]);
+                    return view('student.exam-dashboard',['success'=>false,'msg'=>'This exam is not available for now or no questions available.','exam'=>$qnaExam]);
                 }
 
             }
