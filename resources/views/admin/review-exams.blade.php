@@ -3,7 +3,7 @@
 <div class="container-fluid">
     <!-- row -->
         <div class="row">
-            <!-- Modal Add Subject -->
+            <!-- Modal -->
             <div class="modal fade" id="reviewExamModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reviewExamModalLabel" aria-hidden="true"> <!--Implement first line in each modals-->
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">

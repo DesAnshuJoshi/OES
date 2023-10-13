@@ -27,6 +27,11 @@
                                                         <input type="text" name="question" placeholder="Enter Question" class="form-control input-default" required><br><br>
                                                     </div>
                                                 </div>
+                                                <div class="row mb-5">
+                                                    <div class="col">
+                                                        <textarea name="explaination" class="form-control" rows="4" id="" placeholder="Enter Explaination (Optional)"></textarea>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="modal-footer d-flex justify-content-between align-items-center">
                                                 <button type="button" class="btn btn-primary" id="addAnswers">Add Answers</button>
@@ -81,6 +86,11 @@
                                                     <div class="col">
                                                         <input type="hidden" name="question_id" id="question_id">
                                                         <input type="text" name="question" id="question" placeholder="Enter Question" class="form-control input-default" required><br><br>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <div class="col">
+                                                        <textarea name="explaination" class="form-control" rows="4" id="explaination" placeholder="Enter Explaination (Optional)"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -391,6 +401,7 @@
                     var qna = data.data[0];
                     $("#question_id").val(qna['id']);
                     $("#question").val(qna['question']);
+                    $("#explaination").val(qna['explaination']);
                     $(".eAns").remove();
                     var html = '';
                     for(let i=0; i<qna['answers'].length; i++)

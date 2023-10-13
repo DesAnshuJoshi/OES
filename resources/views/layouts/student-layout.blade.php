@@ -128,13 +128,17 @@
             <div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
 					
-                    <li><a class="" href="/admin/exam" aria-expanded="false">
+                    <li><a class="" href="/dashboard" aria-expanded="false">
 						<i class="fas fa-clipboard-check"></i>
 							<span class="nav-text">Exam</span>
 						</a>
                     </li>
 
-                    
+                    <li><a class="" href="{{ route('resultDashboard') }}" aria-expanded="false">
+						<i class="fas fa-poll"></i>
+							<span class="nav-text">Results</span>
+						</a>
+                    </li>
 
                     <li><a class="" href="/logout" aria-expanded="false">
 						<i class="fas fa-sign-out-alt"></i>

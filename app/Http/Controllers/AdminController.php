@@ -135,8 +135,15 @@ class AdminController extends Controller
 
     public function addQna(Request $request){
         try{
+
+            $explaination = null;
+            if(isset($request->explaination)){
+                $explaination = $request->explaination; 
+            }
+
             $questionId = Question::insertGetId([
-                'question' => $request->question
+                'question' => $request->question,
+                'explaination' => $explaination
             ]);
             foreach($request->answers as $answer){
                 $is_correct = 0;
@@ -173,14 +180,14 @@ class AdminController extends Controller
     {
         try{
 
-            // $explaination = null;
-            // if(isset($request->explaination)){
-            //     $explaination = $request->explaination; 
-            // }
+            $explaination = null;
+            if(isset($request->explaination)){
+                $explaination = $request->explaination; 
+            }
 
             Question::where('id',$request->question_id)->update([
                 'question' => $request->question,
-                // 'explaination' => $explaination
+                'explaination' => $explaination
             ]);
 
             //old answer update
