@@ -169,20 +169,7 @@
             });
 
         });
-
-        // $(document).on('click','.explaination',function(){
-        //     var explaination = $(this).attr('data-explaination');
-        //     console.log(explaination);
-        //     $('#explaination').text(explaination);
-        // });
-        // $(document).on('click', '.explaination-icon', function () {
-        //     var explaination = $(this).data('explaination');
-        //     console.log(explaination);
-        //     $(this).tooltip({
-        //         title: explaination,
-        //         trigger: 'manual',
-        //     }).tooltip('show');
-        // });
+        
         $(document).ready(function () {
             $(document).on('mouseover', '.explaination-icon', function () {
                 var explaination = $(this).data('explaination');
