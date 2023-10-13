@@ -35,7 +35,7 @@
                                                     </div>
                                                 </div>
                                 
-                                                {{-- <div class="row mt-2">
+                                                <div class="row mt-2">
                                                     <div class="col-sm-4">
                                                         <label class="mt-3">Passing Marks</label>
                                                     </div> 
@@ -44,7 +44,7 @@
                                                             onkeypress="return event.charCode >=48 && event.charCode<=57 || event.charCode == 46"
                                                         name="pass_marks" placeholder="Enter Passing Marks" id="pass_marks" class="form-control input-default" required>
                                                     </div>
-                                                </div> --}}
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
@@ -84,7 +84,7 @@
                                             <td>{{ $exam->exam_name }}</td>
                                             <td>{{ $exam->marks }}</td>
                                             <td>{{ count($exam->getQnaExam) * $exam->marks }}</td>
-                                            <td></td>
+                                            <td>{{ $exam->pass_marks }}</td>
                                             <td>
                                                 <div class="d-flex">
                                                     <button class="btn btn-primary shadow btn-xs sharp me-1 editMarks" data-bs-toggle="modal" data-bs-target="#editMarksModal" data-id="{{ $exam->id }}" data-pass-marks="{{ $exam->pass_marks }}" data-marks="{{ $exam->marks }}" data-totalq="{{ count($exam->getQnaExam) }}"><i class="fas fa-pencil-alt"></i></button>
@@ -124,14 +124,48 @@
                 $('#tmarks').val((marks*totalq).toFixed(1));
 
                 totalQna = totalq;
+
+                $('#pass_marks').val($(this).data('pass-marks'));
             });
 
             $('#marks').keyup(function(){
                 $('#tmarks').val( ($(this).val()*totalQna).toFixed(1) );
             });
 
+            $('#pass_marks').keyup(function(){
+
+                $('.pass-error').remove();
+                var tmarks = $('#tmarks').val();
+                var pmarks = $(this).val();
+
+                if(parseFloat(pmarks) >= parseFloat(tmarks)){
+
+                    $(this).parent().append('<p class="pass-error text-danger">Passing Marks will be less than total marks!</p>');
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                    }, 2000);
+
+                }
+
+            });
+
             $('#editMarks').submit(function(event){
                 event.preventDefault();
+
+                $('.pass-error').remove();
+                var tmarks = $('#tmarks').val();
+                var pmarks = $('#pass_marks').val();
+
+                if(parseFloat(pmarks) >= parseFloat(tmarks)){
+
+                    $('#pass_marks').parent().append('<p class="pass-error text-danger">Passing Marks will be less than total marks!</p>');
+                    setTimeout(() => {
+                        $('.pass-error').remove();
+                    }, 2000);
+
+                    return false;
+
+                }
 
                 var formData = $(this).serialize();
 

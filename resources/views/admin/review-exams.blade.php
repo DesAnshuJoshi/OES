@@ -14,12 +14,13 @@
                             </div>
                             <form action="" id="reviewForm">
                                 @csrf
+                                <input type="hidden" name="attempt_id" id="attempt_id">
                             <div class="modal-body review-exam">
                                 Loading...
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Approve Exam</button>
+                                <button type="submit" class="btn btn-primary approved-btn">Approve Exam</button>
                             </div>
                         </form>
                     </div>
@@ -150,6 +151,28 @@
             });
         });
 
+        $('#reviewForm').submit(function(event){
+            event.preventDefault();
+
+            $('.approved-btn').html('Please Wait <i class="fa fa-spinner fa-spin"></i>');
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('approvedQna') }}",
+                type:"POST",
+                data:formData,
+                success:function(data){
+                    if(data.success == true){
+                        location.reload();
+                    }
+                    else{
+                        alert(data.msg);
+                    }
+                }
+            });
+
+        });
         
 
     });
