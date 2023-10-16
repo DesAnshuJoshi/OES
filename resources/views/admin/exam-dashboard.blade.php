@@ -33,6 +33,13 @@
                                                 <input type="date" name="date" class="form-control input-default" required min="@php echo date('Y-m-d'); @endphp"><br>
                                                 <input type="time" name="time" class="form-control input-default" required><br>
                                                 <input type="number" min="1" name="attempt" placeholder="Enter Exam Attempt Time" class="form-control input-default" required><br>
+                                                <select name="plan" required class="default-select form-control wide mb-3">
+                                                    <option value="">Select Plan</option>
+                                                    <option value="0">Free</option>
+                                                    <option value="1">Paid</option>
+                                                </select>
+                                                <input type="number" class="form-control input-default mb-3" placeholder="In INR" name="inr" disabled>
+                                                <input type="number" class="form-control input-default" placeholder="In USD" name="usd" disabled>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
@@ -63,6 +70,8 @@
                                         <th>Date</th>
                                         <th>Time</th>
                                         <th>Attempt</th>
+                                        <th>Plan</th>
+                                        <th>Prices</th>
                                         <th>Add Questions</th>
                                         <th>See Questions</th>
                                         <th>Edit</th>
@@ -79,6 +88,24 @@
                                             <td>{{ $exam->date }}</td>
                                             <td>{{ $exam->time }} Hrs</td>
                                             <td>{{ $exam->attempt }} Time(s)</td>
+                                            <td>
+                                                @if($exam->plan != 0)
+                                                    <span style="color:red">PAID</span>
+                                                @else
+                                                    
+                                                        <span style="color:green">FREE</span>
+                                                    
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($exam->prices != null)
+                                                    @php $planPrices = json_decode($exam->prices); @endphp
+                                                    @foreach($planPrices as $key => $price)
+                                                        <span>{{ $key }} {{ $price }},</span>
+                                                    @endforeach
+                                                @else
+                                                    <span>N / A</span>
+                                                @endif</td>
                                             <td>
                                                 <a href="#" class="addQuestions" data-id="{{ $exam->id }}" data-bs-toggle="modal" data-bs-target="#addQnaModal">Add Questions</a>
                                             </td>
@@ -130,10 +157,23 @@
                                         <input type="date" name="date" id="date" class="form-control input-default" required min="@php echo date('Y-m-d'); @endphp"><br>
                                         <input type="time" name="time" id="time" class="form-control input-default" required><br>
                                         <input type="number" min="1" name="attempt" id="attempt" placeholder="Enter Exam Attempt Time" class="form-control input-default" required><br>
+                                        {{-- <select name="plan" id="plan" required class="default-select form-control wide mb-3 plan">
+                                            <option value="">Select Plan</option>
+                                            <option value="0">Free</option>
+                                            <option value="1">Paid</option>
+                                        </select> --}}
+                                        <select name="plan" id="plan" data-select-type="custom" required class="default-select form-control wide mb-3 plan">
+                                            <option value="">Select Plan</option>
+                                            <option value="0">Free</option>
+                                            <option value="1">Paid</option>
+                                        </select>
+                                        <input type="number" class="form-control input-default mb-3" placeholder="In INR" name="inr" id="inr" disabled>
+                                        <input type="number" class="form-control input-default" placeholder="In USD" name="usd" id="usd" disabled>
+                                        
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button type="button" id="inr" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" id="usd" class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </form>
                             </div>
@@ -233,6 +273,14 @@
 <script src="{{ asset('js/plugins-init/datatables.init.js') }}"></script>
 <script>
     $(document).ready(function(){
+
+        // Define a function to reset the select and textboxes
+        function resetModalState() {
+            $('#plan').val('0'); // Set it to 'Free' by default
+            $('#inr').val('').prop('disabled', true).removeAttr('required');
+            $('#usd').val('').prop('disabled', true).removeAttr('required');
+        }
+
         $("#addExam").submit(function(e){
             e.preventDefault();
 
@@ -255,18 +303,80 @@
                 });
         });
 
-        // Attach the event listener to a common parent element (e.g., the table body)
+        // $('#example tbody').on('click', '.editButton', function () {
+        //     var id = $(this).data('id');
+        //     $("#exam_id").val(id);
+
+        //     var url = '{{ route("getExamDetail", ":id") }}';
+        //     url = url.replace(':id', id);
+
+        //     // Reset the values in prices textboxes
+        //     $('#inr').val('');
+        //     $('#usd').val('');
+
+        //     $.ajax({
+        //         url: url,
+        //         type: "GET",
+        //         success: function (data) {
+        //             if (data.success == true) {
+        //                 var exam = data.data;
+        //                 $('#examName').val(exam[0].exam_name);
+        //                 $('#subject_id').val(exam[0].subject_id);
+        //                 $('#date').val(exam[0].date);
+        //                 $('#time').val(exam[0].time);
+        //                 $('#attempt').val(exam[0].attempt);
+
+        //                 // Select the "plan" element using its classes and change its value
+        //                 var planElement = $('.default-select.form-control.plan');
+        //                 planElement.val(exam[0].plan).trigger('change');
+
+        //                 // Enable or disable the price textboxes based on the plan
+        //                 var inrTextBox = $('#inr');
+        //                 var usdTextBox = $('#usd');
+        //                 if (exam[0].plan == 1) {
+        //                     let prices = JSON.parse(exam[0].prices);
+        //                     inrTextBox.val(prices.INR);
+        //                     usdTextBox.val(prices.USD);
+        //                     inrTextBox.prop('disabled', false);
+        //                     usdTextBox.prop('disabled', false);
+        //                     inrTextBox.attr('required', 'required');
+        //                     usdTextBox.attr('required', 'required');
+        //                 } else {
+        //                     inrTextBox.val(''); // Clear the values
+        //                     usdTextBox.val('');
+        //                     inrTextBox.prop('disabled', true);
+        //                     usdTextBox.prop('disabled', true);
+        //                     inrTextBox.removeAttr('required');
+        //                     usdTextBox.removeAttr('required');
+        //                 }
+
+        //                 // Re-enable the modal's buttons
+        //                 $('#inr, #usd').prop('disabled', false);
+        //             } else {
+        //                 alert(data.msg);
+        //             }
+        //         }
+        //     });
+        // });
+        // Handle the edit button click
         $('#example tbody').on('click', '.editButton', function () {
-            var id = $(this).data('id'); // Use data() method to retrieve the data-id attribute
+            var id = $(this).data('id');
             $("#exam_id").val(id);
 
-            var url = '{{ route("getExamDetail", ":id") }}'; // Note the ":id" placeholder
-            url = url.replace(':id', id); // Replace the ":id" placeholder with the actual ID value
+            var url = '{{ route("getExamDetail", ":id") }}';
+            url = url.replace(':id', id);
+
+            // Reset the values in prices textboxes
+            $('#inr').val('');
+            $('#usd').val('');
+
+            // Reset the select box value to the default option
+            $('#plan').val('0'); // Set it to 'Free' by default
 
             $.ajax({
                 url: url,
                 type: "GET",
-                success: function(data){
+                success: function (data) {
                     if (data.success == true) {
                         var exam = data.data;
                         $('#examName').val(exam[0].exam_name);
@@ -274,12 +384,34 @@
                         $('#date').val(exam[0].date);
                         $('#time').val(exam[0].time);
                         $('#attempt').val(exam[0].attempt);
+
+                        // Enable or disable the price textboxes based on the plan
+                        var inrTextBox = $('#inr');
+                        var usdTextBox = $('#usd');
+                        if (exam[0].plan == 1) {
+                            let prices = JSON.parse(exam[0].prices);
+                            inrTextBox.val(prices.INR);
+                            usdTextBox.val(prices.USD);
+                            inrTextBox.prop('disabled', false);
+                            usdTextBox.prop('disabled', false);
+                            inrTextBox.attr('required', 'required');
+                            usdTextBox.attr('required', 'required');
+                        } else {
+                            inrTextBox.prop('disabled', true);
+                            usdTextBox.prop('disabled', true);
+                            inrTextBox.removeAttr('required');
+                            usdTextBox.removeAttr('required');
+                        }
                     } else {
                         alert(data.msg);
                     }
                 }
             });
         });
+
+
+
+
 
         $("#editExam").submit(function(e){
             e.preventDefault();
@@ -301,6 +433,7 @@
                         }
                     }
                 });
+            resetModalState();
         });
 
         //Delete
@@ -465,7 +598,28 @@
                 }
             })
 
-            });
+        });
+
+        //plan js
+        $('.default-select[name="plan"]').change(function () {
+            var plan = $(this).val();
+            var inrInput = $('input[name="inr"]');
+            var usdInput = $('input[name="usd"]');
+
+            if (plan == "1") { // Use "1" as the value for Paid
+                inrInput.attr('required', 'required');
+                usdInput.attr('required', 'required');
+
+                inrInput.prop('disabled', false);
+                usdInput.prop('disabled', false);
+            } else {
+                inrInput.removeAttr('required');
+                usdInput.removeAttr('required');
+
+                inrInput.prop('disabled', true);
+                usdInput.prop('disabled', true);
+            }
+        });
 
     });
 </script>

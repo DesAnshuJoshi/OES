@@ -129,8 +129,14 @@
 				<ul class="metismenu" id="menu">
 					
                     <li><a class="" href="/dashboard" aria-expanded="false">
-						<i class="fas fa-clipboard-check"></i>
-							<span class="nav-text">Exam</span>
+						<i class="fas fa-file-alt"></i>
+							<span class="nav-text">Free Exam</span>
+						</a>
+                    </li>
+                    
+					<li><a class="" href="{{ route('paidExamDashboard') }}" aria-expanded="false">
+						<i class="fas fa-file-invoice-dollar"></i>
+							<span class="nav-text">Paid Exam</span>
 						</a>
                     </li>
 

@@ -9,7 +9,7 @@
        <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Free Exams</h4>
+                <h4 class="card-title">Paid Exams</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -39,7 +39,10 @@
                                     <td>{{ $exam->time }} Mins</td>
                                     <td>{{ $exam->attempt_counter }}</td>
                                     <td>{{ $exam->attempt }} Time(s)</td>
-                                    <td><a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a></td>
+                                    <td>
+                                        <a href="#" class="fw-bold text-danger">Buy Now</a>
+                                        {{-- <a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a> --}}
+                                    </td> 
                                 </tr>  
                             @endforeach
                             @else

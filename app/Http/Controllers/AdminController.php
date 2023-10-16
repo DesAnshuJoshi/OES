@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\QnaExam;
 
 use App\Imports\QnaImport;
+use App\Exports\ExportStudent;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Hash;
@@ -72,6 +73,13 @@ class AdminController extends Controller
     public function addExam(Request $request)
     {
         try{
+            $plan = $request->plan;
+            $prices = null;
+            
+            if(isset($request->inr) && isset($request->usd)){
+                $prices = json_encode(['INR'=>$request->inr,'USD'=>$request->usd]);
+            }
+            
             $unique_id = uniqid('exid');
             Exam::insert([
                 'exam_name' => $request->exam_name,
@@ -79,7 +87,9 @@ class AdminController extends Controller
                 'date' => $request->date,
                 'time' => $request->time,
                 'attempt' => $request->attempt,
-                'enterance_id' =>$unique_id
+                'enterance_id' =>$unique_id,
+                'plan' => $plan,
+                'prices' => $prices
             ]);
             return response()->json(['success'=>true, 'msg'=>"Exam Added Successfully!"]); 
 
@@ -102,12 +112,21 @@ class AdminController extends Controller
     public function updateExam(Request $request)
     {
         try{
+            $plan = $request->plan;
+            $prices = null;
+            
+            if(isset($request->inr) && isset($request->usd)){
+                $prices = json_encode(['INR'=>$request->inr,'USD'=>$request->usd]);
+            }
+
             $exam = Exam::find($request->exam_id);
             $exam->exam_name = $request->examName;
             $exam->subject_id = $request->subject_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
             $exam->attempt = $request->attempt;
+            $exam->plan = $plan;
+            $exam->prices = $prices;
             $exam->save();
             return response()->json(['success'=>true, 'msg'=> "Exam Updated Successfully!" ]); 
 
@@ -341,6 +360,11 @@ class AdminController extends Controller
         }catch(\Exception $e){
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
+    }
+
+    public function exportStudents()
+    {
+        return Excel::download(new ExportStudent, 'students.xlsx');
     }
 
     public function getQuestions(Request $request)

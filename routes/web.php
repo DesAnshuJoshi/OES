@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +68,7 @@ Route::group(['middleware'=>['web', 'checkAdmin']], function(){
     Route::post('/admin/add-student', [AdminController::class, 'addStudent'])->name('addStudent');
     Route::post('/admin/edit-student', [AdminController::class, 'editStudent'])->name('editStudent');
     Route::post('/admin/delete-student', [AdminController::class, 'deleteStudent'])->name('deleteStudent');
+    Route::get('/export-students',[AdminController::class,'exportStudents'])->name('exportStudents');
 
     //Questions Add
     Route::get('/get-questions',[AdminController::class,'getQuestions'])->name('getQuestions');
@@ -92,4 +94,6 @@ Route::group(['middleware'=>['web', 'checkStudent']], function(){
 
     Route::get('/results',[ExamController::class,'resultDashboard'])->name('resultDashboard');
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
+
+    Route::get('/paid-exams',[StudentController::class,'paidExamDashboard'])->name('paidExamDashboard');
 });

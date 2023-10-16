@@ -10,7 +10,7 @@
                         <div class="bootstrap-modal">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#addStudentModal">Add Students</button>
-                            <button type="button" class="btn btn-primary mb-2 float-end" data-bs-toggle="modal" data-bs-target="#importQnaModal">Import Students</button>
+                            <a href="{{ route('exportStudents') }}" class="btn btn-primary mb-2 float-end">Export Students</a>
                             <!-- Modal Add Student -->
                             <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
