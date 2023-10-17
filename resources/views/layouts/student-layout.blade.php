@@ -23,6 +23,7 @@
 	<link rel="stylesheet" href="{{ asset('vendor/nouislider/nouislider.min.css') }}">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	
 	<!-- Style css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">

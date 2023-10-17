@@ -6,6 +6,8 @@ Dep.
 
 4. php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config
 
+5. composer require razorpay/razorpay:2.*
+
 
 simple
 mail

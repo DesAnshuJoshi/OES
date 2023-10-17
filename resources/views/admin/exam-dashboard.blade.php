@@ -303,61 +303,6 @@
                 });
         });
 
-        // $('#example tbody').on('click', '.editButton', function () {
-        //     var id = $(this).data('id');
-        //     $("#exam_id").val(id);
-
-        //     var url = '{{ route("getExamDetail", ":id") }}';
-        //     url = url.replace(':id', id);
-
-        //     // Reset the values in prices textboxes
-        //     $('#inr').val('');
-        //     $('#usd').val('');
-
-        //     $.ajax({
-        //         url: url,
-        //         type: "GET",
-        //         success: function (data) {
-        //             if (data.success == true) {
-        //                 var exam = data.data;
-        //                 $('#examName').val(exam[0].exam_name);
-        //                 $('#subject_id').val(exam[0].subject_id);
-        //                 $('#date').val(exam[0].date);
-        //                 $('#time').val(exam[0].time);
-        //                 $('#attempt').val(exam[0].attempt);
-
-        //                 // Select the "plan" element using its classes and change its value
-        //                 var planElement = $('.default-select.form-control.plan');
-        //                 planElement.val(exam[0].plan).trigger('change');
-
-        //                 // Enable or disable the price textboxes based on the plan
-        //                 var inrTextBox = $('#inr');
-        //                 var usdTextBox = $('#usd');
-        //                 if (exam[0].plan == 1) {
-        //                     let prices = JSON.parse(exam[0].prices);
-        //                     inrTextBox.val(prices.INR);
-        //                     usdTextBox.val(prices.USD);
-        //                     inrTextBox.prop('disabled', false);
-        //                     usdTextBox.prop('disabled', false);
-        //                     inrTextBox.attr('required', 'required');
-        //                     usdTextBox.attr('required', 'required');
-        //                 } else {
-        //                     inrTextBox.val(''); // Clear the values
-        //                     usdTextBox.val('');
-        //                     inrTextBox.prop('disabled', true);
-        //                     usdTextBox.prop('disabled', true);
-        //                     inrTextBox.removeAttr('required');
-        //                     usdTextBox.removeAttr('required');
-        //                 }
-
-        //                 // Re-enable the modal's buttons
-        //                 $('#inr, #usd').prop('disabled', false);
-        //             } else {
-        //                 alert(data.msg);
-        //             }
-        //         }
-        //     });
-        // });
         // Handle the edit button click
         $('#example tbody').on('click', '.editButton', function () {
             var id = $(this).data('id');

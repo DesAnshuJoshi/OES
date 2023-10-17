@@ -96,4 +96,8 @@ Route::group(['middleware'=>['web', 'checkStudent']], function(){
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
 
     Route::get('/paid-exams',[StudentController::class,'paidExamDashboard'])->name('paidExamDashboard');
+
+    //payments route
+    Route::post('/payment-inr',[StudentController::class,'paymentInr'])->name('paymentInr');
+    Route::get('/verify-payment',[StudentController::class,'verifyPayment'])->name('verifyPayment');
 });
