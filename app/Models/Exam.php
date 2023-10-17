@@ -42,6 +42,11 @@ class Exam extends Model
         return $value;
     }
 
+    public function getPaidInformation()
+    {
+        return $this->hasMany(ExamPayments::class,'exam_id','id');
+    }
+
     public function getAttemptCounterAttribute()
     {
         return $this->count;

@@ -7,6 +7,7 @@ use App\Models\Exam;
 use App\Models\QnaExam;
 use App\Models\ExamAttempt;
 use App\Models\ExamAnswer;
+use App\Models\ExamPayments;
 use Illuminate\Support\Facades\Auth;
 
 use Razorpay\Api\Api;
@@ -16,7 +17,7 @@ class StudentController extends Controller
     //
     public function paidExamDashboard()
     {
-        $exams = Exam::where('plan',1)->with(['subjects'])->orderBy('date','DESC')->get();
+        $exams = Exam::where('plan',1)->with(['subjects','getPaidInformation'])->orderBy('date','DESC')->get();
         return view('student.paid-exams',['exams'=>$exams]);
     }
 
@@ -59,6 +60,12 @@ class StudentController extends Controller
     
             $api->utility->verifyPaymentSignature($attributes);
 
+            ExamPayments::insert([
+                'exam_id' => $request->exam_id,
+                'user_id' => auth()->user()->id,
+                'payment_details' => json_encode($attributes)
+            ]);
+
             return response()->json(['success'=>true,'msg'=>'Your payment was successful, Your payment ID '.$request->razorpay_payment_id]);
         } catch (\Exception $e) {
             
@@ -66,5 +73,33 @@ class StudentController extends Controller
 
         }
 
+    }
+
+    public function paymentStatus(Request $request, $examid)
+    {
+        if($request->PayerID){
+
+            $data = array(
+                'PayerID' => $request->PayerID 
+            );
+
+            ExamPayments::insert([
+                'exam_id' => $examid,
+                'user_id' => auth()->user()->id,
+                'payment_details' => json_encode($data)
+            ]);
+
+            // $message = 'Your payment has been done';
+            $message = '0';
+
+            return view('paymentUSD',compact('message'));
+
+        }
+        else{
+            // $message = 'Your payment failed!';
+            $message = '1';
+
+            return view('paymentUSD',compact('message'));
+        }
     }
 }

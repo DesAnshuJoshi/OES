@@ -100,4 +100,7 @@ Route::group(['middleware'=>['web', 'checkStudent']], function(){
     //payments route
     Route::post('/payment-inr',[StudentController::class,'paymentInr'])->name('paymentInr');
     Route::get('/verify-payment',[StudentController::class,'verifyPayment'])->name('verifyPayment');
+
+    //PAYPAL USD STATUS
+    Route::get('/payment-status/{examid}',[StudentController::class,'paymentStatus']);
 });

@@ -40,8 +40,12 @@
                                     <td>{{ $exam->attempt_counter }}</td>
                                     <td>{{ $exam->attempt }} Time(s)</td>
                                     <td>
-                                        <a href="#" class="fw-bold text-danger buyNow" data-name="{{ $exam->exam_name }}" data-id="{{ $exam->id }}" data-prices="{{ $exam->prices }}" data-bs-toggle="modal" data-bs-target="#buyModal">Buy Now</a>
-                                        {{-- <a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a> --}}
+                                        @if(count($exam->getPaidInformation) > 0 && $exam->getPaidInformation[0]['user_id'] == auth()->user()->id)
+                                            {{-- <a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a>      --}}
+                                            <a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a>                       
+                                        @else
+                                            <b><a href="#" class="fw-bold text-danger buyNow" data-name="{{ $exam->exam_name }}" data-id="{{ $exam->id }}" data-prices="{{ $exam->prices }}" data-toggle="modal" data-target="#buyModal">Buy Now</a></b>
+                                        @endif
                                     </td> 
                                 </tr>  
                             @endforeach
@@ -86,9 +90,23 @@
    </div>
 </div>
 
+<form action="{{ env('PAYPAL_CHECKOUT_URL') }}" method="POST", id="paypalForm">
+
+    <input type="hidden" name="business" value="{{ env('PAYPAL_BUSINESS_MAIL') }}">
+    <input type="hidden" name="cmd" value="_xclick">
+    <input type="hidden" name="item_name" id="item_name">
+    <input type="hidden" name="item_number" id="item_number">
+    <input type="hidden" name="amount" id="amount">
+    <input type="hidden" name="currency_code" value="USD">
+    <input type="hidden" name="cancel_return" value="{{ route('paidExamDashboard') }}">
+    <input type="hidden" name="return" id="return">
+
+</form>
+
 <script src="{{ asset('vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/plugins-init/datatables.init.js') }}"></script>
 <script>
+    var isInr = false;
     $(document).ready(function () {
         $('.buyNow').click(function(){
             var prices = JSON.parse($(this).attr('data-prices'));
@@ -108,6 +126,21 @@
 
             // Append new options
             priceSelect.innerHTML = html;
+
+            $('#exam_id').val( $(this).attr('data-id') );
+            $('#exam_name').val( $(this).attr('data-name') );
+        });
+
+        $('#price').change(function(){
+            var text = $('#price option:selected').text();
+
+            if(text.includes('INR')){
+                isInr = true;
+            }
+            else{
+                isInr = false;
+            }
+
         });
 
         $('#buyForm').submit(function(event){
@@ -117,7 +150,10 @@
 
             var formData = $(this).serialize();
             var price = $('#price').val();
+            var exam_id = $('#exam_id').val();
+            var exam_name = $('#exam_name').val();
 
+            if(isInr == true){
                 $.ajax({
                     url:"{{ route('paymentInr') }}",
                     type:"POST",
@@ -134,7 +170,7 @@
                                 "order_id": response.order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                                 "handler": function (response){
                                     var paymentData = {
-                                                // exam_id:exam_id,
+                                                exam_id:exam_id,
                                                 razorpay_payment_id:response.razorpay_payment_id,
                                                 razorpay_order_id:response.razorpay_order_id,
                                                 razorpay_signature:response.razorpay_signature
@@ -180,6 +216,14 @@
                         }
                     }
                 });
+            } else 
+            {
+                $('#item_name').val(exam_name);
+                $('#item_number').val('1');
+                $('#amount').val(price);
+                $('#return').val("{{ URL::to('/') }}/payment-status/"+exam_id);
+                $('#paypalForm').submit();
+            }
         });
     
         $(document).on('click', '.copy', function () {
