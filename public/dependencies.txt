@@ -7,6 +7,7 @@ Dep.
 4. php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config
 
 5. composer require razorpay/razorpay:2.*
+6. composer require paypal/rest-api-sdk-php
 
 
 simple
