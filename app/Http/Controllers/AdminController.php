@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
@@ -530,6 +531,38 @@ class AdminController extends Controller
         }catch(\Exception $e){
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
+    }
+
+    public function loadPackageDashboard()
+    {
+        $exams = Exam::where('plan',0)->get();
+        $packages = Package::orderBy('created_at','DESC')->get();
+
+        return view('admin.packageDashboard',compact(['exams','packages']));
+    }
+
+    public function addPackage(Request $request)
+    {
+        $exmIds = [];
+        foreach($request->exams as $exam)
+        {
+            $exmIds[] = (int)$exam;
+        }
+
+        $price = json_encode(
+            [
+                'INR' => $request->price_inr,
+                'USD' => $request->price_usd
+            ]
+        );
+
+        Package::insert([
+            'name' => $request->package_name,
+            'exam_id' => json_encode($exmIds),
+            'price' => $price,
+            // 'expire' => $request->expire
+        ]);
+        return redirect()->back();
     }
 
 }

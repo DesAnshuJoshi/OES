@@ -145,6 +145,12 @@
 						</a>
                     </li>
 
+					<li><a class="" href="{{ route('packageDashboard') }}" aria-expanded="false">
+						<i class="fas fa-box-open"></i>
+							<span class="nav-text">Exam Package</span>
+						</a>
+                    </li>
+
 					<li><a class="" href="/admin/marks" aria-expanded="false">
 						<i class="fas fa-check"></i>
 							<span class="nav-text">Marks</span>
