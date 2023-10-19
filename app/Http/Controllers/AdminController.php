@@ -560,7 +560,43 @@ class AdminController extends Controller
             'name' => $request->package_name,
             'exam_id' => json_encode($exmIds),
             'price' => $price,
-            // 'expire' => $request->expire
+            'expiry' => $request->expiry
+        ]);
+        return redirect()->back();
+    }
+
+    public function deletePackage(Request $request)
+    {
+        try {
+
+            Package::where('id',$request->id)->delete();
+
+            return response()->json(['success'=>true,'msg'=>'Package deleted Successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function editPackage(Request $request)
+    {
+        $exmIds = [];
+        foreach($request->exams as $exam)
+        {
+            $exmIds[] = (int)$exam;
+        }
+
+        $price = json_encode(
+            [
+                'INR' => $request->price_inr,
+                'USD' => $request->price_usd
+            ]
+        );
+
+        Package::where('id',$request->package_id)->update([
+            'name' => $request->package_name,
+            'exam_id' => json_encode($exmIds),
+            'price' => $price,
+            'expiry' => $request->expiry
         ]);
         return redirect()->back();
     }
