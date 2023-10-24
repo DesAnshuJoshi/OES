@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ExamAnswer;
 use App\Models\ExamAttempt;
+use App\Models\ExamPayments;
 use App\Models\Package;
 use Illuminate\Http\Request;
 use App\Models\Subject;
@@ -355,7 +356,7 @@ class AdminController extends Controller
         try {
             
             User::where('id',$request->id)->delete();
-            // ExamPayments::where('user_id',$request->id)->delete();
+            ExamPayments::where('user_id',$request->id)->delete();
             return response()->json(['success'=>true,'msg'=>'Student Deleted successfully!']);
 
         }catch(\Exception $e){
@@ -599,6 +600,12 @@ class AdminController extends Controller
             'expiry' => $request->expiry
         ]);
         return redirect()->back();
+    }
+
+    public function paymentDetails()
+    {
+        $paymentDetails = ExamPayments::with(['exam','user'])->orderBy('id','DESC')->get();
+        return view('admin.payment-details',compact('paymentDetails'));
     }
 
 }

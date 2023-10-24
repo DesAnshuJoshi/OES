@@ -177,6 +177,12 @@
 						</a>
                     </li>
 
+					<li><a class="" href="{{ route('paymentDetails') }}" aria-expanded="false">
+						<i class="fas fa-rupee-sign"></i>
+							<span class="nav-text">Payments</span>
+						</a>
+                    </li>
+
                     <li><a class="" href="/logout" aria-expanded="false">
 						<i class="fas fa-sign-out-alt"></i>
 							<span class="nav-text">Logout</span>

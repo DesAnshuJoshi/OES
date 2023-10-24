@@ -90,6 +90,9 @@ Route::group(['middleware'=>['web', 'checkAdmin']], function(){
     Route::post('/add-package',[AdminController::class,'addPackage'])->name('addPackage');
     Route::get('/delete-package',[AdminController::class,'deletePackage'])->name('deletePackage');
     Route::post('/edit-package',[AdminController::class,'editPackage'])->name('editPackage');
+
+    //payment details
+    Route::get('/payment-details',[AdminController::class,'paymentDetails'])->name('paymentDetails');
 });
 
 Route::group(['middleware'=>['web', 'checkStudent']], function(){
@@ -112,4 +115,11 @@ Route::group(['middleware'=>['web', 'checkStudent']], function(){
 
     //show paid packages
     Route::get('/paid-package-plans',[StudentController::class,'paidPackagePlans'])->name('paidPackagePlans');
+
+    //packages buy routes
+    Route::post('/package-payment-inr',[StudentController::class,'packagePaymentInr'])->name('packagePaymentInr');
+    Route::get('/verify-package-payment',[StudentController::class,'verifyPackagePayment'])->name('verifyPackagePayment');
+
+    //buy pacakge usd
+    Route::get('/package-payment-status/{packageid}',[StudentController::class,'packagePaymentStatus']);
 });
