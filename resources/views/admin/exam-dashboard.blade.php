@@ -1,4 +1,12 @@
 @extends('layouts/admin-layout')
+@section('space-head')
+<style>
+.parent-class .default-select.pointer-events-none {
+    pointer-events: none !important;
+}
+</style>
+@endsection
+
 @section('space-work')
 <div class="container-fluid">
     <!-- row -->
@@ -90,11 +98,20 @@
                                             <td>{{ $exam->attempt }} Time(s)</td>
                                             <td>
                                                 @if($exam->plan != 0)
-                                                    <span style="color:red">PAID</span>
+                                                    <span class="badge badge-pill badge-danger">PAID</span>
                                                 @else
-                                                    
-                                                        <span style="color:green">FREE</span>
-                                                    
+                                                    @php 
+                                                        $package = json_decode(json_encode($exam->package), true);
+                                                        $expires = '';
+                                                        foreach($package as $data){
+                                                            $expires = $data['expiry'];
+                                                        }
+                                                    @endphp
+                                                    @if($exam->is_package_exam && date('Y-m-d') <= $expires)
+                                                        <span class="badge badge-pill badge-success">Package Exam(FREE)</span>
+                                                    @else
+                                                        <span class="badge badge-pill badge-success">FREE</span>
+                                                    @endif                                                
                                                 @endif
                                             </td>
                                             <td>
@@ -114,7 +131,7 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex">
-                                                    <button class="btn btn-primary shadow btn-xs sharp me-1 editButton" data-bs-toggle="modal" data-bs-target="#editExamModal" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name}}"><i class="fas fa-pencil-alt"></i></button>
+                                                    <button class="btn btn-primary shadow btn-xs sharp me-1 editButton" data-bs-toggle="modal" data-bs-target="#editExamModal" data-id="{{ $exam->id }}" data-exam="{{ $exam->exam_name}}" data-disabled="@if($exam->is_package_exam && date('Y-m-d') <= $expires) 1 @else 0 @endif"><i class="fas fa-pencil-alt"></i></button>
                                                 </div>
                                             </td>
                                             <td>
@@ -157,12 +174,12 @@
                                         <input type="date" name="date" id="date" class="form-control input-default" required min="@php echo date('Y-m-d'); @endphp"><br>
                                         <input type="time" name="time" id="time" class="form-control input-default" required><br>
                                         <input type="number" min="1" name="attempt" id="attempt" placeholder="Enter Exam Attempt Time" class="form-control input-default" required><br>
-                                        {{-- <select name="plan" id="plan" required class="default-select form-control wide mb-3 plan">
+                                        <!-- <select name="plan" id="plan" required class=" form-control wide mb-3 plan">
                                             <option value="">Select Plan</option>
                                             <option value="0">Free</option>
                                             <option value="1">Paid</option>
-                                        </select> --}}
-                                        <select name="plan" id="plan" data-select-type="custom" required class="default-select form-control wide mb-3 plan">
+                                        </select> -->
+                                        <select name="plan" id="plan" data-select-type="custom" required class="plan-nice-select default-select form-control wide mb-3 plan">
                                             <option value="">Select Plan</option>
                                             <option value="0">Free</option>
                                             <option value="1">Paid</option>
@@ -305,6 +322,9 @@
 
         // Handle the edit button click
         $('#example tbody').on('click', '.editButton', function () {
+
+            var isDisabled = parseInt($(this).data('disabled'));
+            
             var id = $(this).data('id');
             $("#exam_id").val(id);
 
@@ -317,6 +337,16 @@
 
             // Reset the select box value to the default option
             $('#plan').val('0'); // Set it to 'Free' by default
+
+            if (isDisabled == 1) {
+                // If the exam is in a package, disable pointer events for the specific .nice-select element associated with #plan also value will be set to ''
+                $('#plan').val('');
+                $('.plan-nice-select').css('pointer-events', 'none');
+            } else {
+                // If the exam is not in a package, enable pointer events for the specific .nice-select element associated with #plan
+                $('.plan-nice-select').css('pointer-events', 'auto');
+            }
+
 
             $.ajax({
                 url: url,

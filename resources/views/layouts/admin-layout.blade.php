@@ -25,6 +25,8 @@
 	<link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/multiselect-dropdown.js') }}"></script>
 	
+	@yield('space-head')
+
 	<!-- Style css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <style>
