@@ -8,6 +8,7 @@ use App\Models\QnaExam;
 use App\Models\ExamAttempt;
 use App\Models\ExamAnswer;
 use App\Models\ExamPayments;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
 
 use Razorpay\Api\Api;
@@ -101,5 +102,11 @@ class StudentController extends Controller
 
             return view('paymentUSD',compact('message'));
         }
+    }
+
+    public function paidPackagePlans()
+    {
+        $packages = Package::orderBy('created_at','desc')->get();
+        return view('student.paidPackagePlans',compact('packages'));
     }
 }

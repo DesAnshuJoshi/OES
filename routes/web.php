@@ -109,4 +109,7 @@ Route::group(['middleware'=>['web', 'checkStudent']], function(){
 
     //PAYPAL USD STATUS
     Route::get('/payment-status/{examid}',[StudentController::class,'paymentStatus']);
+
+    //show paid packages
+    Route::get('/paid-package-plans',[StudentController::class,'paidPackagePlans'])->name('paidPackagePlans');
 });

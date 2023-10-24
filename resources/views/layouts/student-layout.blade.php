@@ -141,6 +141,12 @@
 						</a>
                     </li>
 
+					<li><a class="" href="{{ route('paidPackagePlans') }}" aria-expanded="false">
+						<i class="fas fa-box-open"></i>
+							<span class="nav-text">Paid Package</span>
+						</a>
+                    </li>
+
                     <li><a class="" href="{{ route('resultDashboard') }}" aria-expanded="false">
 						<i class="fas fa-poll"></i>
 							<span class="nav-text">Results</span>

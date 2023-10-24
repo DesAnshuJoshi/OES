@@ -28,20 +28,29 @@
                         </thead>
                         <tbody>
                             @if (count($exams) > 0)
-                            @php $count = 1; @endphp
-                            @foreach ($exams as $exam)
-                                <tr>
-                                    <td style="display: none;">{{ $exam->id }}</td>
-                                    <td>{{ $count++ }}</td>
-                                    <td>{{ $exam->exam_name }}</td>
-                                    <td>{{ $exam->subjects[0]['subject'] }}</td>
-                                    <td>{{ $exam->date }}</td>
-                                    <td>{{ $exam->time }} Mins</td>
-                                    <td>{{ $exam->attempt_counter }}</td>
-                                    <td>{{ $exam->attempt }} Time(s)</td>
-                                    <td><a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a></td>
-                                </tr>  
-                            @endforeach
+                                @php $count = 1; @endphp
+                                @foreach ($exams as $exam)
+                                    @php 
+                                        $exam->id;
+                                        $package = json_decode(json_encode($exam->package), true);
+                                        $expires = '';
+                                        foreach($package as $data){
+                                            $expires = $data['expiry'];
+                                        }
+                                    @endphp
+                                    @if($exam->is_package_exam != true || date('Y-m-d') > $expires)
+                                        <tr>
+                                            <td>{{ $count++ }}</td>
+                                            <td>{{ $exam->exam_name }}</td>
+                                            <td>{{ $exam->subjects[0]['subject'] }}</td>
+                                            <td>{{ $exam->date }}</td>
+                                            <td>{{ $exam->time }} Mins</td>
+                                            <td>{{ $exam->attempt_counter }}</td>
+                                            <td>{{ $exam->attempt }} Time(s)</td>
+                                            <td><a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a></td>
+                                        </tr> 
+                                    @endif 
+                                @endforeach
                             @else
                             <tr>
                                 <td colspan="8" class="text-muted">No Exams Found!</td>
