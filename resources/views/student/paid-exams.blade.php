@@ -44,7 +44,7 @@
                                             {{-- <a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a>      --}}
                                             <a href="#" class="btn btn-primary shadow btn-xs sharp copy" data-code="{{ $exam->enterance_id }}"><i class="fa fa-copy"></i></a>                       
                                         @else
-                                            <b><a href="#" class="fw-bold text-danger buyNow" data-name="{{ $exam->exam_name }}" data-id="{{ $exam->id }}" data-prices="{{ $exam->prices }}" data-toggle="modal" data-target="#buyModal">Buy Now</a></b>
+                                            <b><a href="#" class="fw-bold text-danger buyNow" data-name="{{ $exam->exam_name }}" data-id="{{ $exam->id }}" data-prices="{{ $exam->prices }}" data-bs-toggle="modal" data-bs-target="#buyModal">Buy Now</a></b>
                                         @endif
                                     </td> 
                                 </tr>  
