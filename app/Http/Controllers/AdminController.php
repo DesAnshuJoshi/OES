@@ -17,6 +17,7 @@ use App\Models\QnaExam;
 use App\Imports\QnaImport;
 use App\Exports\ExportStudent;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Hash;
@@ -356,10 +357,17 @@ class AdminController extends Controller
     public function deleteStudent(Request $request)
     {
         try {
-            
-            User::where('id',$request->id)->delete();
-            ExamPayments::where('user_id',$request->id)->delete();
-            ExamAttempt::where('user_id', $request->id)->delete();
+            //Get Attempt ID based user ID
+            $userId = $request->id;
+            $attemptIds = ExamAttempt::where('user_id', $userId)->pluck('id');
+
+            //Deletion happens in order
+            ExamAnswer::whereIn('attempt_id', $attemptIds)->delete();
+            ExamAttempt::where('user_id', $userId)->delete();
+            ExamPayments::where('user_id', $userId)->delete();
+            User::where('id', $userId)->delete();
+
+
             return response()->json(['success'=>true,'msg'=>'Student Deleted successfully!']);
 
         }catch(\Exception $e){
