@@ -18,8 +18,7 @@
                             Loading...
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary approved-btn">Approve Exam</button>
+                            <button type="button" class="btn btn-danger primary" data-bs-dismiss="modal">Close</button>
                         </div>
                 </div>
             </div>
@@ -56,6 +55,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Exam</th>
+                                <th>Marks Got</th>
+                                <th>Pass Marks</th>
                                 <th>Result</th>
                                 <th>Status</th>
                             </tr>
@@ -67,6 +68,8 @@
                                     <tr>
                                         <td>{{ $x++ }}</td>
                                         <td>{{ $attempt->exam->exam_name }}</td>
+                                        <td>{{ $attempt->marks }} / {{ count($attempt->exam->getQnaExam) * $attempt->exam->marks }}</td>
+                                        <td>{{ $attempt->exam->pass_marks }}</td>
                                         <td>
                                             @if($attempt->status == 0)
                                             <span class="badge badge-xl badge-dark">Not Declared</span>

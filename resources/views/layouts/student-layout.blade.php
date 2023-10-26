@@ -61,7 +61,7 @@
 				</svg>
 				<div class="brand-title">
 					<h2 class="">EduTestify</h2>
-					<span class="brand-sub-title">@username</span>
+					<span class="brand-sub-title">@&nbsp;{{ Auth::user()->name }}</span>
 				</div>
             </a>
             <div class="nav-control">

@@ -16,6 +16,7 @@ use App\Models\QnaExam;
 
 use App\Imports\QnaImport;
 use App\Exports\ExportStudent;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +58,7 @@ class AdminController extends Controller
     {
         try{
             Subject::where('id', $request->id)->delete();
+            Exam::where('subject_id', $request->id)->delete();
             return response()->json(['success'=>true, 'msg'=>"Subject Deleted Successfully!"]); 
 
         }catch(\Exception $e){
@@ -266,7 +268,7 @@ class AdminController extends Controller
         try{
             Question::where('id',$request->id)->delete();
             Answer::where('questions_id',$request->id)->delete();
-            
+            QnaExam::where('question_id', $request->id)->delete();
             return response()->json(['success'=>true, 'msg'=>"Exam Deleted Successfully!"]); 
 
         }catch(\Exception $e){
@@ -357,6 +359,7 @@ class AdminController extends Controller
             
             User::where('id',$request->id)->delete();
             ExamPayments::where('user_id',$request->id)->delete();
+            ExamAttempt::where('user_id', $request->id)->delete();
             return response()->json(['success'=>true,'msg'=>'Student Deleted successfully!']);
 
         }catch(\Exception $e){
