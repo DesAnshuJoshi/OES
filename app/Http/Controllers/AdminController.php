@@ -29,6 +29,11 @@ use Illuminate\Support\Facades\URL;
 class AdminController extends Controller
 {
     //
+    public function adminSubjects()
+    {
+        $subjects = Subject::all();
+        return view('admin.subjects', compact('subjects'));
+    }
     public function addSubject(Request $request)
     {
         try{

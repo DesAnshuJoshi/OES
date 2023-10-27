@@ -135,56 +135,73 @@
         <div class="dlabnav">
             <div class="dlabnav-scroll">
 				<ul class="metismenu" id="menu">
-                    <li><a class="" href="/admin/dashboard" aria-expanded="false">
+					
+					<li>
+						<a class="" href="/admin/dashboard" aria-expanded="false">
+							<i class="fas fa-home"></i>
+							<span class="nav-text">Dashboard</span>
+						</a>
+					</li>
+
+                    <li>
+						<a class="" href="/admin/subjects" aria-expanded="false">
 							<i class="fas fa-book"></i>
 							<span class="nav-text">Subject</span>
 						</a>
                     </li>
 					
-                    <li><a class="" href="/admin/exam" aria-expanded="false">
-						<i class="fas fa-clipboard-check"></i>
+                    <li>
+						<a class="" href="/admin/exam" aria-expanded="false">
+							<i class="fas fa-clipboard-check"></i>
 							<span class="nav-text">Exam</span>
 						</a>
                     </li>
 
-					<li><a class="" href="{{ route('packageDashboard') }}" aria-expanded="false">
-						<i class="fas fa-box-open"></i>
+					<li>
+						<a class="" href="{{ route('packageDashboard') }}" aria-expanded="false">
+							<i class="fas fa-box-open"></i>
 							<span class="nav-text">Exam Package</span>
 						</a>
                     </li>
 
-					<li><a class="" href="/admin/marks" aria-expanded="false">
-						<i class="fas fa-check"></i>
+					<li>
+						<a class="" href="/admin/marks" aria-expanded="false">
+							<i class="fas fa-check"></i>
 							<span class="nav-text">Marks</span>
 						</a>
                     </li>
 
-                    <li><a class="" href="/admin/qna" aria-expanded="false">
-						<i class="fas fa-clipboard-list"></i>
+                    <li>
+						<a class="" href="/admin/qna" aria-expanded="false">
+							<i class="fas fa-clipboard-list"></i>
 							<span class="nav-text">Questions</span>
 						</a>
                     </li>
 
-					<li><a class="" href="/admin/review-exams" aria-expanded="false">
-						<i class="fas fa-eye"></i>
+					<li>
+						<a class="" href="/admin/review-exams" aria-expanded="false">
+							<i class="fas fa-eye"></i>
 							<span class="nav-text">Review Exams</span>
 						</a>
                     </li>
 
-                    <li><a class="" href="/admin/students" aria-expanded="false">
-						<i class="fas fa-graduation-cap"></i>
+                    <li>
+						<a class="" href="/admin/students" aria-expanded="false">
+							<i class="fas fa-graduation-cap"></i>
 							<span class="nav-text">Students</span>
 						</a>
                     </li>
 
-					<li><a class="" href="{{ route('paymentDetails') }}" aria-expanded="false">
-						<i class="fas fa-rupee-sign"></i>
+					<li>
+						<a class="" href="{{ route('paymentDetails') }}" aria-expanded="false">
+							<i class="fas fa-rupee-sign"></i>
 							<span class="nav-text">Payments</span>
 						</a>
                     </li>
 
-                    <li><a class="" href="/logout" aria-expanded="false">
-						<i class="fas fa-sign-out-alt"></i>
+                    <li>
+						<a class="" href="/logout" aria-expanded="false">
+							<i class="fas fa-sign-out-alt"></i>
 							<span class="nav-text">Logout</span>
 						</a>
                     </li>

@@ -98,8 +98,7 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-        $subjects = Subject::all();
-        return view('admin.dashboard', compact('subjects'));
+        return view('admin.dashboard');
     }
 
     public function logout(Request $request)
