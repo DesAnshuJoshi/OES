@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamAttempt;
+use App\Models\ExamPayments;
+use App\Models\Package;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Exam;
@@ -98,7 +102,17 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-        return view('admin.dashboard');
+        // Get the counts
+        $subjectCount = Subject::count();
+        $examCount = Exam::count();
+        $packageCount = Package::count();
+        $questionCount = Question::count();
+        $examReviewedCount = ExamAttempt::where('status', 1)->count();
+        $studentCount = User::where('is_admin', 0)->count();
+        $paymentCount = ExamPayments::count();
+
+        // Pass the data to your Blade view
+        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount'));
     }
 
     public function logout(Request $request)

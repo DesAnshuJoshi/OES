@@ -30,96 +30,92 @@
 										<div class="row">
 											<div class="col-xl-3 col-sm-6">
 												<div class="card">
-                                                    <div class="card-body d-flex px-4 justify-content-between">
-                                                        <div class="justify-content-between">
-                                                            <h2 class="fs-32 font-w700">892</h2>
-                                                            <span class="fs-18 font-w500 d-block">New Projects</span>
-                                                        </div>
-                                                        <div id="NewCustomers"></div>
-                                                    </div>
-                                                </div>
-											</div>
-											<div class="col-xl-3 col-sm-6">
-												<div class="card">
-													<div class="card-body d-flex px-4 justify-content-between">
+													<div class="card-body d-flex justify-content-between align-items-center">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">892</h2>
-																<span class="fs-18 font-w500 d-block">New Projects</span>
-																<span class="d-block fs-16 font-w400"><small class="text-success">-2%</small> than last month</span>
-															</div>
+															<h2 class="fs-32 font-w700">{{ $subjectCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Subjects</span>
 														</div>
-														<div id="NewCustomers1"></div>
-													</div>
-												</div>
-											</div>
-                                            <div class="col-xl-3 col-sm-6">
-												<div class="card">
-													<div class="card-body d-flex px-4  justify-content-between">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">562</h2>
-																<span class="fs-18 font-w500 d-block">Total Clients</span>
-																<span class="d-block fs-16 font-w400"><small class="text-danger">-2%</small> than last month</span>
-															</div>
+															<i class="fas fa-book text-primary" style="font-size: 3rem;"></i>
 														</div>
-														<div id="NewCustomers"></div>
 													</div>
 												</div>
 											</div>
 											<div class="col-xl-3 col-sm-6">
 												<div class="card">
-													<div class="card-body d-flex px-4  justify-content-between">
+													<div class="card-body d-flex justify-content-between align-items-center">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">892</h2>
-																<span class="fs-18 font-w500 d-block">New Projects</span>
-																<span class="d-block fs-16 font-w400"><small class="text-success">-2%</small> than last month</span>
-															</div>
+															<h2 class="fs-32 font-w700">{{ $examCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Exams</span>
 														</div>
-														<div id="NewCustomers1"></div>
-													</div>
-												</div>
-											</div>
-                                            <div class="col-xl-3 col-sm-6">
-												<div class="card">
-													<div class="card-body d-flex px-4  justify-content-between">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">562</h2>
-																<span class="fs-18 font-w500 d-block">Total Clients</span>
-																<span class="d-block fs-16 font-w400"><small class="text-danger">-2%</small> than last month</span>
-															</div>
+															<i class="fas fa-clipboard-check text-primary" style="font-size: 3rem;"></i>
 														</div>
-														<div id="NewCustomers"></div>
 													</div>
 												</div>
 											</div>
 											<div class="col-xl-3 col-sm-6">
 												<div class="card">
-													<div class="card-body d-flex px-4  justify-content-between">
+													<div class="card-body d-flex justify-content-between align-items-center">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">892</h2>
-																<span class="fs-18 font-w500 d-block">New Projects</span>
-																<span class="d-block fs-16 font-w400"><small class="text-success">-2%</small> than last month</span>
-															</div>
+															<h2 class="fs-32 font-w700">{{ $packageCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Packages</span>
 														</div>
-														<div id="NewCustomers1"></div>
+														<div>
+															<i class="fas fa-box-open text-primary" style="font-size: 3rem;"></i>
+														</div>
 													</div>
 												</div>
 											</div>
-                                            <div class="col-xl-3 col-sm-6">
+											<div class="col-xl-3 col-sm-6">
 												<div class="card">
-													<div class="card-body d-flex px-4  justify-content-between">
+													<div class="card-body d-flex justify-content-between align-items-center">
 														<div>
-															<div class="">
-																<h2 class="fs-32 font-w700">562</h2>
-																<span class="fs-18 font-w500 d-block">Total Clients</span>
-																<span class="d-block fs-16 font-w400"><small class="text-danger">-2%</small> than last month</span>
-															</div>
+															<h2 class="fs-32 font-w700">{{ $questionCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Questions</span>
 														</div>
-														<div id="NewCustomers"></div>
+														<div>
+															<i class="fas fa-clipboard-list text-primary" style="font-size: 3rem;"></i>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-3 col-sm-6">
+												<div class="card">
+													<div class="card-body d-flex justify-content-between align-items-center">
+														<div>
+															<h2 class="fs-32 font-w700">{{ $examReviewedCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Exams Reviewed</span>
+														</div>
+														<div>
+															<i class="fas fa-eye text-primary" style="font-size: 3rem;"></i>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-3 col-sm-6">
+												<div class="card">
+													<div class="card-body d-flex justify-content-between align-items-center">
+														<div>
+															<h2 class="fs-32 font-w700">{{ $studentCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Students</span>
+														</div>
+														<div>
+															<i class="fas fa-user text-primary" style="font-size: 3rem;"></i>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-3 col-sm-6">
+												<div class="card">
+													<div class="card-body d-flex justify-content-between align-items-center">
+														<div>
+															<h2 class="fs-32 font-w700">{{ $paymentCount }}</h2>
+															<span class="fs-18 font-w500 d-block">Total Payments</span>
+														</div>
+														<div>
+															<i class="fas fa-rupee-sign text-primary" style="font-size: 3rem;"></i>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -127,130 +123,56 @@
 									</div>
 								</div>
 							</div>
-							{{-- <div class="col-xl-6">
+
+							<div class="col-xl-12">
 								<div class="row">
-									<div class="col-xl-12">
+									
+									<div class="col-xl-6 col-lg-12 col-sm-12">
 										<div class="card">
-											<div class="card-header border-0 flex-wrap">
-												<h4 class="fs-20 font-w700 mb-2">Project Statistics</h4>
-												<div class="d-flex align-items-center project-tab mb-2">	
-													<div class="card-tabs mt-3 mt-sm-0 mb-3 ">
-														<ul class="nav nav-tabs" role="tablist">
-															<li class="nav-item">
-																<a class="nav-link active" data-bs-toggle="tab" href="#monthly" role="tab">Monthly</a>
-															</li>
-															<li class="nav-item">
-																<a class="nav-link" data-bs-toggle="tab" href="#Weekly" role="tab">Weekly</a>
-															</li>
-															<li class="nav-item">
-																<a class="nav-link" data-bs-toggle="tab" href="#Today" role="tab">Today</a>
-															</li>
-														</ul>
-													</div>
-													<div class="dropdown ms-2">
-														<div class="btn-link" data-bs-toggle="dropdown">
-															<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5"></circle>
-																<circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5"></circle>
-																<circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5"></circle>
-															</svg>
-														</div>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="javascript:void(0)">Delete</a>
-															<a class="dropdown-item" href="javascript:void(0)">Edit</a>
-														</div>
-													</div>
-												</div>	
+											<div class="card-header">
+												<h4 class="card-title">Subject wise Exams</h4>
 											</div>
 											<div class="card-body">
-												<div class="d-flex justify-content-between align-items-center flex-wrap">
-													<div class="d-flex">
-														<div class="d-inline-block position-relative donut-chart-sale mb-3">
-															<span class="donut1" data-peity='{ "fill": ["rgba(136,108,192,1)", "rgba(241, 234, 255, 1)"],   "innerRadius": 20, "radius": 15}'>5/8</span>
-														</div>
-														<div class="ms-3">
-															<h4 class="fs-24 font-w700 ">246</h4>
-															<span class="fs-16 font-w400 d-block">Total Projects</span>
-														</div>
-													</div>
-													<div class="d-flex">	
-														<div class="d-flex me-5">
-															<div class="mt-2">
-																<svg width="13" height="13" viewbox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-																	<circle cx="6.5" cy="6.5" r="6.5" fill="#FFCF6D"></circle>
-																</svg>
-															</div>
-															<div class="ms-3">
-																<h4 class="fs-24 font-w700 ">246</h4>
-																<span class="fs-16 font-w400 d-block">On Going</span>
-															</div>
-														</div>
-														<div class="d-flex">
-															<div class="mt-2">
-																<svg width="13" height="13" viewbox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-																	<circle cx="6.5" cy="6.5" r="6.5" fill="#FFA7D7"></circle>
-																</svg>
-
-															</div>
-															<div class="ms-3">
-																<h4 class="fs-24 font-w700 ">28</h4>
-																<span class="fs-16 font-w400 d-block">Unfinished</span>
-															</div>
-														</div>
-													</div>
-												</div>
-												<div class="tab-content">
-													<div class="tab-pane fade active show" id="monthly">
-														<div id="chartBar" class="chartBar"></div>
-													</div>	
-													<div class="tab-pane fade" id="Weekly">
-														<div id="chartBar1" class="chartBar"></div>
-													</div>
-													<div class="tab-pane fade" id="Today">
-														<div id="chartBar2" class="chartBar"></div>
-													</div>
-												</div>
-												<div class="d-flex align-items-center">
-													<label class="form-check-label font-w400 fs-16 mb-0" for="flexSwitchCheckChecked1">Number</label>
-													<div class="form-check form-switch toggle-switch">
-														<input class="form-check-input custome" type="checkbox" id="flexSwitchCheckChecked1" checked="">
-													 
-													</div>
-													<label class="form-check-label font-w400 fs-16 mb-0 ms-3" for="flexSwitchCheckChecked2">Analytics</label>	
-													<div class="form-check form-switch toggle-switch">
-													  <input class="form-check-input custome" type="checkbox" id="flexSwitchCheckChecked2" checked="">
-													</div>
-												</div>
+												<canvas id="barChart_1"></canvas>
 											</div>
 										</div>
 									</div>
-									<div class="col-xl-12">
+									<div class="col-xl-6 col-lg-12 col-sm-12">
 										<div class="card">
-											<div class="card-header border-0 pb-0">
-												<h4 class="fs-20 font-w700 mb-0">Completion Project Rate</h4>
-												<div class="dropdown ">
-													<div class="btn-link" data-bs-toggle="dropdown">
-														<svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-															<circle cx="12.4999" cy="3.5" r="2.5" fill="#A5A5A5"></circle>
-															<circle cx="12.4999" cy="11.5" r="2.5" fill="#A5A5A5"></circle>
-															<circle cx="12.4999" cy="19.5" r="2.5" fill="#A5A5A5"></circle>
-														</svg>
-													</div>
-													<div class="dropdown-menu dropdown-menu-right">
-														<a class="dropdown-item" href="javascript:void(0)">Delete</a>
-														<a class="dropdown-item" href="javascript:void(0)">Edit</a>
-													</div>
-												</div>
+											<div class="card-header">
+												<h4 class="card-title">Exams Attempted</h4>
 											</div>
-											<div class="card-body pb-0">
-												<div id="revenueMap" class="revenueMap"></div>
+											<div class="card-body">
+												<canvas id="barChart_2"></canvas>
 											</div>
 										</div>
 									</div>
+									<div class="col-xl-6 col-lg-12 col-sm-12">
+										<div class="card">
+											<div class="card-header">
+												<h4 class="card-title">Top Rankers</h4>
+											</div>
+											<div class="card-body">
+												<canvas id="barChart_3"></canvas>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6 col-lg-12 col-sm-12">
+										<div class="card">
+											<div class="card-header">
+												<h4 class="card-title">Attempted & Reviewed Exams</h4>
+											</div>
+											<div class="card-body">
+												<canvas id="lineChart_1"></canvas>
+											</div>
+										</div>
+									</div>
+
 								</div>
-								
-							</div> --}}
+							</div>
+
 							
+
 						</div>
 					</div>
 				</div>
@@ -258,6 +180,13 @@
         <!--**********************************
             Content body end
         ***********************************-->
+	<script src="{{ asset('vendor/chart.js/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/plugins-init/chartjs-init.js') }}"></script>
+	
+    <script src="{{ asset('js/custom.min.js') }}"></script>
+	<script src="{{ asset('js/dlabnav-init.js') }}"></script>
+	<script src="{{ asset('js/demo.js') }}"></script>
+    <script src="{{ asset('js/styleSwitcher.js') }}"></script>
 @endsection
 
 {{-- <div class="col-xl-12">
