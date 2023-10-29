@@ -41,6 +41,7 @@
 	
 	<!-- Apex Chart -->
 	<script src="{{ asset('vendor/apexchart/apexchart.js') }}"></script>
+	<script src="{{ asset('js/apexcharts.min.js') }}"></script>
 	
 	<script src="{{ asset('vendor/chart.js/Chart.bundle.min.js') }}"></script>
 	

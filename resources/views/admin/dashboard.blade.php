@@ -133,17 +133,7 @@
 												<h4 class="card-title">Subject wise Exams</h4>
 											</div>
 											<div class="card-body">
-												<canvas id="barChart_1"></canvas>
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-6 col-lg-12 col-sm-12">
-										<div class="card">
-											<div class="card-header">
-												<h4 class="card-title">Exams Attempted</h4>
-											</div>
-											<div class="card-body">
-												<canvas id="barChart_2"></canvas>
+												<div id="sub-exams"></div>
 											</div>
 										</div>
 									</div>
@@ -153,21 +143,30 @@
 												<h4 class="card-title">Top Rankers</h4>
 											</div>
 											<div class="card-body">
-												<canvas id="barChart_3"></canvas>
+												<div id="ranks"></div>
 											</div>
 										</div>
 									</div>
 									<div class="col-xl-6 col-lg-12 col-sm-12">
 										<div class="card">
 											<div class="card-header">
-												<h4 class="card-title">Attempted & Reviewed Exams</h4>
+												<h4 class="card-title">Reviewed & Not-Reviewed Exams</h4>
 											</div>
 											<div class="card-body">
-												<canvas id="lineChart_1"></canvas>
+												<div id="rev-pie"></div>
 											</div>
 										</div>
 									</div>
-
+									<div class="col-xl-6 col-lg-12 col-sm-12">
+										<div class="card">
+											<div class="card-header">
+												<h4 class="card-title">Exam Plans</h4>
+											</div>
+											<div class="card-body">
+												<div id="exams"></div></div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -180,13 +179,250 @@
         <!--**********************************
             Content body end
         ***********************************-->
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				//CHART-ONE | EXAMS IN SUBJECTS
+				var subjects = @json($subjects);
+				var examCounts = @json($subjectsWithExamCount);
+				// Create arrays for chart data
+				var subjectIds = [];
+				var examCountsData = [];
+				// Extract the data for the chart
+				examCounts.forEach(function (item) {
+    				subjectIds.push(item.subject_id);
+    				examCountsData.push(item.exam_count);
+				});
+
+				var options = {
+					series: [{
+						name: 'Exam Count',
+						data: examCountsData,
+					}],
+					chart: {
+						height: 350,
+						type: 'area'
+					},
+					dataLabels: {
+						enabled: false
+					},
+					stroke: {
+						curve: 'smooth'
+					},
+					xaxis: {
+						type: 'categories',
+						categories: subjects
+					},
+					tooltip: {
+						x: {
+							format: 'subjects'
+						},
+					},
+				};
+
+				var chart = new ApexCharts(document.querySelector("#sub-exams"), options);
+				chart.render();
+				
+
+				//CHART-TWO | RANKS
+				var chartData = @json($chartData);
+
+				var categories = Object.keys(chartData);
+
+				var series = [];
+				for (var exam in chartData[categories[0]]) {
+					var data = categories.map(function (category) {
+						return chartData[category][exam] || 0;
+					});
+					series.push({ name: exam, data: data });
+				}
+
+				var options = {
+					series: series,
+					chart: {
+						type: 'bar',
+						height: 350,
+						stacked: true,
+						toolbar: {
+							show: true
+						},
+						zoom: {
+							enabled: true
+						}
+					},
+					responsive: [{
+						breakpoint: 480,
+						options: {
+							legend: {
+								position: 'bottom',
+								offsetX: -10,
+								offsetY: 0
+							}
+						}
+					}],
+					plotOptions: {
+						bar: {
+							horizontal: false,
+							borderRadius: 10,
+							dataLabels: {
+								total: {
+									enabled: true,
+									style: {
+										fontSize: '13px',
+										fontWeight: 900
+									}
+								}
+							}
+						},
+					},
+					xaxis: {
+						type: 'categories',
+						categories: categories,
+					},
+					legend: {
+						position: 'right',
+						offsetY: 40
+					},
+					fill: {
+						opacity: 1
+					}
+				};
+
+				var chart = new ApexCharts(document.querySelector("#ranks"), options);
+				chart.render();
+
+				//CHART-THREE | REVIEWED & NOT REVIEWED EXAMS
+				var options = {
+					series: [{{ $reviewedCount }}, {{ $notReviewedCount }}],
+					chart: {
+						width: 600,
+						type: 'pie',
+					},
+					labels: ['Reviewed', 'Not Reviewed'],
+					responsive: [{
+						breakpoint: 480,
+						options: {
+							chart: {
+								width: 200
+							},
+							legend: {
+								position: 'bottom'
+							}
+						}
+					}]
+				};
+
+				var chart = new ApexCharts(document.querySelector("#rev-pie"), options);
+				chart.render();
+
+				//CHART-4 | EXAM PLANS
+				var options = {
+					series: [{{ $paidExamsCount }}, {{ $totalFreeExamsNotInPackages }}, {{ $totalFreeExamsCountInPackages }}],
+					labels: ['Paid Exams', 'Free Exams (Not in Package)', 'Free Exams (In a Package)'],
+					chart: {
+						type: 'donut',
+					},
+					responsive: [{
+						breakpoint: 480,
+						options: {
+							chart: {
+								width: 200
+							},
+							legend: {
+								position: 'bottom'
+							}
+						}
+					}]
+				};
+
+				var chart = new ApexCharts(document.querySelector("#exams"), options);
+				chart.render();
+
+							
+				//CHART-5 | WHICH STUDENT ATTEMPT WHICH EXAM THE MOST 
+				
+				var options = {
+				series: [{
+				name: 'TEAM A',
+				type: 'column',
+				data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
+				}, {
+				name: 'TEAM B',
+				type: 'area',
+				data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
+				}, {
+				name: 'TEAM C',
+				type: 'line',
+				data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
+				}],
+				chart: {
+				height: 350,
+				type: 'line',
+				stacked: false,
+				},
+				stroke: {
+				width: [0, 2, 5],
+				curve: 'smooth'
+				},
+				plotOptions: {
+				bar: {
+					columnWidth: '50%'
+				}
+				},
+				
+				fill: {
+				opacity: [0.85, 0.25, 1],
+				gradient: {
+					inverseColors: false,
+					shade: 'light',
+					type: "vertical",
+					opacityFrom: 0.85,
+					opacityTo: 0.55,
+					stops: [0, 100, 100, 100]
+				}
+				},
+				labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003',
+				'08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'
+				],
+				markers: {
+				size: 0
+				},
+				xaxis: {
+				type: 'datetime'
+				},
+				yaxis: {
+				title: {
+					text: 'Points',
+				},
+				min: 0
+				},
+				tooltip: {
+				shared: true,
+				intersect: false,
+				y: {
+					formatter: function (y) {
+					if (typeof y !== "undefined") {
+						return y.toFixed(0) + " points";
+					}
+					return y;
+				
+					}
+				}
+				}
+				};
+
+				var chart = new ApexCharts(document.querySelector("#demo"), options);
+				chart.render();
+						
+			});
+		</script>		
 	<script src="{{ asset('vendor/chart.js/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('js/plugins-init/chartjs-init.js') }}"></script>
-	
+	<script src="{{ asset('js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('js/custom.min.js') }}"></script>
 	<script src="{{ asset('js/dlabnav-init.js') }}"></script>
 	<script src="{{ asset('js/demo.js') }}"></script>
     <script src="{{ asset('js/styleSwitcher.js') }}"></script>
+	<script src="{{ asset('js/charts.js') }}"></script>
 @endsection
 
 {{-- <div class="col-xl-12">

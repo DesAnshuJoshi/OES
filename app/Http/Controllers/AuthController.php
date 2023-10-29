@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Exam;
 use App\Models\Subject;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\PasswordReset;
@@ -111,8 +113,74 @@ class AuthController extends Controller
         $studentCount = User::where('is_admin', 0)->count();
         $paymentCount = ExamPayments::count();
 
+        //Chart-1 Data
+        $subjects = Subject::pluck('sub_code')->toArray(); // Get an array of subject IDs
+        $subjectsWithExamCount = Subject::select('subjects.id as subject_id', DB::raw('count(exams.id) as exam_count'))
+            ->leftJoin('exams', 'subjects.id', '=', 'exams.subject_id')
+            ->groupBy('subjects.id')
+            ->get();
+
+        //Chart-2 Data
+        $rankedStudents = DB::table('exams_attempt')
+            ->select('users.name as student_name', 'exams.exam_name as exam_name', DB::raw('MAX(exams_attempt.marks) as best_score'))
+            ->join('users', 'users.id', '=', 'exams_attempt.user_id')
+            ->join('exams', 'exams.id', '=', 'exams_attempt.exam_id')
+            ->groupBy('student_name', 'exam_name')
+            ->get();
+        $chartData = [];
+        foreach ($rankedStudents as $student) {
+            $studentName = $student->student_name;
+            $examName = $student->exam_name;
+            
+            if (!isset($chartData[$studentName])) {
+                $chartData[$studentName] = [];
+            }
+            
+            $chartData[$studentName][$examName] = $student->best_score;
+        }
+
+        //Chart-3 Data
+        $reviewedCount = DB::table('exams_attempt')->where('status', 1)->count();
+        $notReviewedCount = DB::table('exams_attempt')->where('status', 0)->count();
+
+        //Chart-4 Data
+        $paidExamsCount = DB::table('exams')->where('plan', 1)->count();
+        $freeExamsCount = DB::table('exams')->where('plan', 0)->count();
+        $packagesWithFreeExams = DB::table('packages')
+            ->select('packages.id', 'packages.exam_id')
+            ->get();
+        $packageData = [];
+
+        foreach ($packagesWithFreeExams as $package) {
+            $packageId = $package->id;
+            $examIds = explode(',', $package->exam_id);
+            $freeExamsCountForPackage = DB::table('exams')
+                ->whereIn('id', $examIds)
+                ->where('plan', 0)
+                ->count();
+            $packageData[$packageId] = [
+                'exam_ids' => $examIds,
+                'free_exams_count' => $freeExamsCountForPackage
+            ];
+        }
+
+        $totalFreeExamsCountInPackages = 0;
+
+        foreach ($packageData as $package) {
+            $totalFreeExamsCountInPackages += $package['free_exams_count'];
+        }
+
+        $totalFreeExamsNotInPackages = $freeExamsCount - $totalFreeExamsCountInPackages;
+
+   
+
+        
+        
+                                                                                                       //get exam counts for each subject
+
+        // Log::info('Variable data:', ['totalFreeExamsCount' => $totalFreeExamsCount]);
         // Pass the data to your Blade view
-        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount'));
+        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'totalFreeExamsNotInPackages', 'totalFreeExamsCountInPackages'));
     }
 
     public function logout(Request $request)

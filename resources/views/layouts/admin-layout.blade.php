@@ -271,6 +271,8 @@
 	<script src="{{ asset('js/dashboard/dashboard-1.js') }}"></script>
 	
 	<script src="{{ asset('vendor/owl-carousel/owl.carousel.js') }}"></script>
+
+	<script src="{{ asset('js/apexcharts.min.js') }}"></script>
 	
     <script src="{{ asset('js/custom.min.js') }}"></script>
 	<script src="{{ asset('js/dlabnav-init.js') }}"></script>

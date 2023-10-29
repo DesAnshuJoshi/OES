@@ -22,8 +22,8 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <label for="subject">Subject</label>
-                                                <input type="text" name="subject" class="form-control input-default" id="subject" placeholder="Enter Subject Name" required>
+                                                <input type="text" name="subject" class="form-control input-default" id="subject" placeholder="Enter Subject Name" required><br>
+                                                <input type="text" name="subject_code" class="form-control input-default" id="subject_code" placeholder="Enter Subject Code" required>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
@@ -50,6 +50,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Subject</th>
+                                        <th>Subject Code</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
                                     </tr>
@@ -60,9 +61,10 @@
                                         <tr>
                                             <td>{{ $subject->id }}</td>
                                             <td>{{ $subject->subject }}</td>
+                                            <td>{{ $subject->sub_code }}</td>
                                             <td>
                                                 <div class="d-flex">
-                                                    <button class="btn btn-primary shadow btn-xs sharp me-1 editButton" data-bs-toggle="modal" data-bs-target="#editSubjectModal" data-id="{{ $subject->id }}" data-subject="{{ $subject->subject}}"><i class="fas fa-pencil-alt"></i></button>
+                                                    <button class="btn btn-primary shadow btn-xs sharp me-1 editButton" data-bs-toggle="modal" data-bs-target="#editSubjectModal" data-id="{{ $subject->id }}" data-subject="{{ $subject->subject}}" data-subject-code="{{ $subject->sub_code}}"><i class="fas fa-pencil-alt"></i></button>
                                                 </div>
                                             </td>
                                             <td>
@@ -93,7 +95,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <label for="subject">Subject</label>
-                                        <input type="text" name="subject" class="form-control input-default" id="edit_subject" placeholder="Enter Subject Name" required>
+                                        <input type="text" name="subject" class="form-control input-default" id="edit_subject" placeholder="Enter Subject Name" required><br>
+                                        <input type="text" name="subject_code" class="form-control input-default" id="edit_subject_code" placeholder="Enter Subject Code" required>
                                         <input type="hidden" name="id" id="edit_subject_id">
                                     </div>
                                     <div class="modal-footer">
@@ -163,16 +166,19 @@
                 var button = $(event.relatedTarget); // Button that triggered the modal
                 var sid = button.data('id');
                 var sub = button.data('subject');
+                var subc = button.data('subject-code');
                 
                 // Update the modal content with the new values
                 $('#edit_subject').val(sub);
                 $('#edit_subject_id').val(sid);
+                $('#edit_subject_code').val(subc);
             });
 
             // Clear the modal content when the modal is hidden
             $('#editSubjectModal').on('hidden.bs.modal', function () {
                 $('#edit_subject').val('');
                 $('#edit_subject_id').val('');
+                $('#edit_subject_code').val('');
             });
 
             $("#editSubject").submit(function(e){
