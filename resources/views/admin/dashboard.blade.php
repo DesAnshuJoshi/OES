@@ -19,23 +19,6 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     
 
-    {{-- <script>
-  function generateData(count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = "Exam " + (i + 1).toString();
-      var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-  
-      series.push({
-        x: x,
-        y: y
-      });
-      i++;
-    }
-    return series;
-  }
-  </script> --}}
   <script>
 	function generateData(exam_names, student_names, attempt_counts) {
 	  var series = [];

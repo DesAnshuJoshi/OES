@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\Rule;
 
 
 class AuthController extends Controller
@@ -102,6 +103,45 @@ class AuthController extends Controller
         return view('student.dashboard',['exams'=>$exams]);
     }
 
+    public function adminProfile()
+    {
+        $userData = Auth::user();
+        return view('admin.profile', compact('userData'));
+    }
+
+    public function adminProfileUpdate(Request $request)
+    {
+        try{
+            $user = Auth::user();
+            $request->validate([
+                'name' => 'string|required|min:2',
+                'email' => [
+                    'string',
+                    'email',
+                    'required',
+                    'max:100',
+                    Rule::unique('users')->ignore($user->id), // Ignore the current user
+                ],
+                'profile_pic' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image uploads
+            ]);
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+
+            if ($request->hasFile('profile_pic')) {
+                $profilePicPath = $request->file('profile_pic')->store('profile', 'public');
+                $user->profile_pic = $profilePicPath;
+            }
+
+            $user->save();
+
+            return response()->json(['success'=>true, 'msg'=>"Profile Updated Successfully!"]);
+        }
+        catch(\Exception $e){
+            return response()->json(['success'=>false, 'msg'=>$e->getMessage()]); 
+        }
+    }
+
     public function adminDashboard()
     {
         // Get the counts
@@ -169,18 +209,6 @@ class AuthController extends Controller
         $totalFreeExamsNotInPackages = $freeExamsCount - $totalFreeExamsCountInPackages;
 
         //Chart-5 Data
-        // $allStudents = DB::table('users')->where('is_admin', 0)->get('name as student_name');
-        // $allExams = DB::table('exams')->get('exam_name');
-
-        // $attemptData = DB::table('users')
-        //     ->crossJoin('exams')
-        //     ->leftJoin('exams_attempt', function ($join) {
-        //         $join->on('exams_attempt.user_id', '=', 'users.id')
-        //             ->on('exams_attempt.exam_id', '=', 'exams.id');
-        //     })
-        //     ->select('users.name as student_name', 'exams.exam_name as exam_name', DB::raw('count(exams_attempt.id) as attempt_count'))
-        //     ->groupBy('users.name', 'exams.exam_name')
-        //     ->get();
         $allStudents = DB::table('users')->where('is_admin', 0)->select('name as student_name')->get();
         $allExams = DB::table('exams')->select('exam_name')->get();
 
@@ -195,16 +223,6 @@ class AuthController extends Controller
             ->groupBy('users.name', 'exams.exam_name')
             ->get();
 
-
-
-
-   
-
-        
-        
-                                                                                                      
-
-        // Log::info('Variable data:', ['attemptData' => $attemptData]);
         // Pass the data to your Blade view
         return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'totalFreeExamsNotInPackages', 'totalFreeExamsCountInPackages', 'allStudents', 'allExams', 'attemptData'));
     }
