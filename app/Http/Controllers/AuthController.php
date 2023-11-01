@@ -150,7 +150,6 @@ class AuthController extends Controller
             ->select('packages.id', 'packages.exam_id')
             ->get();
         $packageData = [];
-
         foreach ($packagesWithFreeExams as $package) {
             $packageId = $package->id;
             $examIds = explode(',', $package->exam_id);
@@ -163,24 +162,51 @@ class AuthController extends Controller
                 'free_exams_count' => $freeExamsCountForPackage
             ];
         }
-
         $totalFreeExamsCountInPackages = 0;
-
         foreach ($packageData as $package) {
             $totalFreeExamsCountInPackages += $package['free_exams_count'];
         }
-
         $totalFreeExamsNotInPackages = $freeExamsCount - $totalFreeExamsCountInPackages;
+
+        //Chart-5 Data
+        // $allStudents = DB::table('users')->where('is_admin', 0)->get('name as student_name');
+        // $allExams = DB::table('exams')->get('exam_name');
+
+        // $attemptData = DB::table('users')
+        //     ->crossJoin('exams')
+        //     ->leftJoin('exams_attempt', function ($join) {
+        //         $join->on('exams_attempt.user_id', '=', 'users.id')
+        //             ->on('exams_attempt.exam_id', '=', 'exams.id');
+        //     })
+        //     ->select('users.name as student_name', 'exams.exam_name as exam_name', DB::raw('count(exams_attempt.id) as attempt_count'))
+        //     ->groupBy('users.name', 'exams.exam_name')
+        //     ->get();
+        $allStudents = DB::table('users')->where('is_admin', 0)->select('name as student_name')->get();
+        $allExams = DB::table('exams')->select('exam_name')->get();
+
+        $attemptData = DB::table('users')
+            ->where('users.is_admin', 0)
+            ->crossJoin('exams')
+            ->leftJoin('exams_attempt', function ($join) {
+                $join->on('exams_attempt.user_id', '=', 'users.id')
+                    ->on('exams_attempt.exam_id', '=', 'exams.id');
+            })
+            ->select('users.name as student_name', 'exams.exam_name as exam_name', DB::raw('count(exams_attempt.id) as attempt_count'))
+            ->groupBy('users.name', 'exams.exam_name')
+            ->get();
+
+
+
 
    
 
         
         
-                                                                                                       //get exam counts for each subject
+                                                                                                      
 
-        // Log::info('Variable data:', ['totalFreeExamsCount' => $totalFreeExamsCount]);
+        // Log::info('Variable data:', ['attemptData' => $attemptData]);
         // Pass the data to your Blade view
-        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'totalFreeExamsNotInPackages', 'totalFreeExamsCountInPackages'));
+        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'totalFreeExamsNotInPackages', 'totalFreeExamsCountInPackages', 'allStudents', 'allExams', 'attemptData'));
     }
 
     public function logout(Request $request)

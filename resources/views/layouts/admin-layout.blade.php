@@ -17,7 +17,7 @@
 	<title>Edutestify | Online Examination System</title>
 	
 	<!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+	{{-- <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}"> --}}
 	<link href="{{ asset('vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
 	<link href="{{ asset('vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('vendor/nouislider/nouislider.min.css') }}">
@@ -25,7 +25,7 @@
 	<link href="{{ asset('vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <script src="{{ asset('js/multiselect-dropdown.js') }}"></script>
 	
-	@yield('space-head')
+	@yield('chart-head')
 
 	<!-- Style css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">

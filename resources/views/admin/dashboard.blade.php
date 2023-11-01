@@ -1,5 +1,64 @@
 @extends('layouts/admin-layout')
+@section('chart-head')
+	<script>
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/eligrey-classlist-js-polyfill@1.2.20171210/classList.min.js"><\/script>'
+        )
+      window.Promise ||
+        document.write(
+          '<script src="https://cdn.jsdelivr.net/npm/findindex_polyfill_mdn"><\/script>'
+        )
+    </script>
 
+    
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+
+    {{-- <script>
+  function generateData(count, yrange) {
+    var i = 0;
+    var series = [];
+    while (i < count) {
+      var x = "Exam " + (i + 1).toString();
+      var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+  
+      series.push({
+        x: x,
+        y: y
+      });
+      i++;
+    }
+    return series;
+  }
+  </script> --}}
+  <script>
+	function generateData(exam_names, student_names, attempt_counts) {
+	  var series = [];
+	  for (var i = 0; i < student_names.length; i++) {
+		var student_name = student_names[i];
+		var data = [];
+		for (var j = 0; j < exam_names.length; j++) {
+		  data.push({
+			x: exam_names[j],
+			y: attempt_counts[i][j] || 0 // If no attempt count, set it to 0
+		  });
+		}
+		series.push({
+		  name: student_name,
+		  data: data
+		});
+	  }
+	  return series;
+	}
+  </script>
+  
+  
+@endsection
 @section('space-work')
     <!--**********************************
             Content body start
@@ -164,6 +223,16 @@
 											</div>
 											<div class="card-body">
 												<div id="exams"></div></div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-12 col-lg-12 col-sm-12">
+										<div class="card">
+											<div class="card-header">
+												<h4 class="card-title">Most Attempted Exam</h4>
+											</div>
+											<div class="card-body">
+												<div id="demoChart"></div></div>
 											</div>
 										</div>
 									</div>
@@ -340,78 +409,148 @@
 							
 				//CHART-5 | WHICH STUDENT ATTEMPT WHICH EXAM THE MOST 
 				
+				// var options = {
+				// series: [{
+				// 	name: 'Student 1',
+				// 	data: generateData(5, {min: -10, max: 20})
+				// },
+				// {
+				// 	name: 'Student 2',
+				// 	data: generateData(5, {min: -30, max: 55})
+				// },
+				// {
+				// 	name: 'Student 3',
+				// 	data: generateData(5, {min: -30, max: 55})
+				// },
+				
+				// ],
+				// chart: {
+				// height: 350,
+				// type: 'heatmap',
+				// },
+				// plotOptions: {
+				// heatmap: {
+				// 	shadeIntensity: 0.5,
+				// 	radius: 0,
+				// 	useFillColorAsStroke: true,
+				// 	colorScale: {
+				// 	ranges: [{
+				// 		from: -30,
+				// 		to: 5,
+				// 		name: 'low',
+				// 		color: '#00A100'
+				// 		},
+				// 		{
+				// 		from: 6,
+				// 		to: 20,
+				// 		name: 'medium',
+				// 		color: '#128FD9'
+				// 		},
+				// 		{
+				// 		from: 21,
+				// 		to: 45,
+				// 		name: 'high',
+				// 		color: '#FFB200'
+				// 		},
+				// 		{
+				// 		from: 46,
+				// 		to: 55,
+				// 		name: 'extreme',
+				// 		color: '#FF0000'
+				// 		}
+				// 	]
+				// 	}
+				// }
+				// },
+				// dataLabels: {
+				// enabled: false
+				// },
+				// stroke: {
+				// width: 1
+				// },
+				// };
+
+				// var chart = new ApexCharts(document.querySelector("#demoChart"), options);
+				// chart.render();
+				//CHART-5 | WHICH STUDENT ATTEMPT WHICH EXAM THE MOST 
+				
+				// Assuming you have the data arrays fetched from Laravel
+				var attemptData = <?php echo json_encode($attemptData); ?>;
+
+				// Extract unique student names and exam names
+				var student_names = [...new Set(attemptData.map(item => item.student_name))];
+				var exam_names = [...new Set(attemptData.map(item => item.exam_name))];
+
+				// Create an array for attempt counts
+				var attempt_counts = new Array(student_names.length);
+				for (var i = 0; i < student_names.length; i++) {
+					attempt_counts[i] = new Array(exam_names.length).fill(0); // Initialize with 0s
+				}
+
+				// Fill the attempt_counts array with actual attempt counts
+				attemptData.forEach(function(item) {
+					var studentIndex = student_names.indexOf(item.student_name);
+					var examIndex = exam_names.indexOf(item.exam_name);
+					attempt_counts[studentIndex][examIndex] = item.attempt_count;
+				});
+
+				// Now you have the required data structure to create the heatmap chart
+				var seriesData = generateData(exam_names, student_names, attempt_counts);
+				console.log(seriesData);
 				var options = {
-				series: [{
-				name: 'TEAM A',
-				type: 'column',
-				data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30]
-				}, {
-				name: 'TEAM B',
-				type: 'area',
-				data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43]
-				}, {
-				name: 'TEAM C',
-				type: 'line',
-				data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39]
-				}],
-				chart: {
-				height: 350,
-				type: 'line',
-				stacked: false,
-				},
-				stroke: {
-				width: [0, 2, 5],
-				curve: 'smooth'
-				},
-				plotOptions: {
-				bar: {
-					columnWidth: '50%'
-				}
-				},
-				
-				fill: {
-				opacity: [0.85, 0.25, 1],
-				gradient: {
-					inverseColors: false,
-					shade: 'light',
-					type: "vertical",
-					opacityFrom: 0.85,
-					opacityTo: 0.55,
-					stops: [0, 100, 100, 100]
-				}
-				},
-				labels: ['01/01/2003', '02/01/2003', '03/01/2003', '04/01/2003', '05/01/2003', '06/01/2003', '07/01/2003',
-				'08/01/2003', '09/01/2003', '10/01/2003', '11/01/2003'
-				],
-				markers: {
-				size: 0
-				},
-				xaxis: {
-				type: 'datetime'
-				},
-				yaxis: {
-				title: {
-					text: 'Points',
-				},
-				min: 0
-				},
-				tooltip: {
-				shared: true,
-				intersect: false,
-				y: {
-					formatter: function (y) {
-					if (typeof y !== "undefined") {
-						return y.toFixed(0) + " points";
-					}
-					return y;
-				
-					}
-				}
-				}
+					series: seriesData,
+					chart: {
+					height: 350,
+					type: 'heatmap',
+					},
+					plotOptions: {
+					heatmap: {
+						shadeIntensity: 0.5,
+						radius: 10,
+						useFillColorAsStroke: true,
+						colorScale: {
+						ranges: [
+							{
+							from: 0,
+							to: 0,
+							name: 'low',
+							color: '#ededed',
+							},
+							{
+							from: 1,
+							to: 3,
+							name: 'medium',
+							color: '#4cb32b',
+							},
+							{
+							from: 4,
+							to: 5,
+							name: 'high',
+							color: '#fd7e14',
+							},
+							{
+							from: 6,
+							to: 7,
+							name: 'extreme',
+							color: '#dc3545',
+							},
+						],
+						},
+					},
+					},
+					dataLabels: {
+					enabled: false,
+					},
+					stroke: {
+					width: 2,
+					colors: ['#333333'],
+					},
 				};
 
-				var chart = new ApexCharts(document.querySelector("#demo"), options);
+				var chart = new ApexCharts(document.querySelector("#demoChart"), options);
 				chart.render();
+				
+
 						
 			});
 		</script>		
