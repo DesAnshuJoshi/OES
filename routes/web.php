@@ -45,7 +45,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 Route::group(['middleware'=>['web', 'checkAdmin']], function(){
     Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard']);
     Route::get('/admin/profile', [AuthController::class, 'adminProfile']);
-    Route::get('/profileUpdate', [AuthController::class, 'adminProfileUpdate']);
+    Route::post('/edit-profile', [AuthController::class, 'editProfile'])->name('editProfile');
     
     //subjects route
     Route::get('/admin/subjects', [AdminController::class, 'adminSubjects']);

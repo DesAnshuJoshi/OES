@@ -27,6 +27,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 
+
 class AuthController extends Controller
 {
     //
@@ -109,38 +110,57 @@ class AuthController extends Controller
         return view('admin.profile', compact('userData'));
     }
 
-    public function adminProfileUpdate(Request $request)
-    {
-        try{
-            $user = Auth::user();
-            $request->validate([
-                'name' => 'string|required|min:2',
-                'email' => [
-                    'string',
-                    'email',
-                    'required',
-                    'max:100',
-                    Rule::unique('users')->ignore($user->id), // Ignore the current user
-                ],
-                'profile_pic' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validate image uploads
-            ]);
+    public function editProfile(Request $request)
+	{
+		try {
+			$user = Auth::user();
 
-            $user->name = $request->name;
-            $user->email = $request->email;
+			// Define the basic validation rules
+			$rules = [
+				'name' => 'string|required|min:2',
+			];
 
-            if ($request->hasFile('profile_pic')) {
-                $profilePicPath = $request->file('profile_pic')->store('profile', 'public');
-                $user->profile_pic = $profilePicPath;
-            }
+			// Only add email and profile_pic validation if they are provided in the request
+			if ($request->has('email')) {
+				// Only apply the 'unique' rule if the email has changed
+				$rules['email'] = 'string|email|required|max:100|unique:users,email,' . $user->id;
+			}
 
-            $user->save();
+			if ($request->hasFile('profile_pic')) {
+				$rules['profile_pic'] = 'image|mimes:jpeg,png,jpg,gif|max:8192';
+			}
 
-            return response()->json(['success'=>true, 'msg'=>"Profile Updated Successfully!"]);
-        }
-        catch(\Exception $e){
-            return response()->json(['success'=>false, 'msg'=>$e->getMessage()]); 
-        }
-    }
+			$request->validate($rules);
+
+			$user->name = $request->name;
+
+			if ($request->has('email')) {
+				$user->email = $request->email;
+			}
+
+			if ($request->hasFile('profile_pic')) {
+				$profilePicPath = $request->file('profile_pic')->store('profile', 'public');
+				$user->profile_pic = $profilePicPath;
+				Log::info('Variable data:', ['profilePicPath' => $profilePicPath]);
+			}
+
+			// Ensure 'is_admin' remains '1' for admins
+			if ($user->is_admin) {
+				$user->is_admin = 1;
+			}
+
+			//$user->save();
+
+            Log::info('Hello World');
+
+
+
+			return response()->json(['success' => true, 'msg' => "Profile Updated Successfully!"]);
+		} catch (\Exception $e) {
+			return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+		}
+	}
+
 
     public function adminDashboard()
     {
@@ -186,27 +206,6 @@ class AuthController extends Controller
         //Chart-4 Data
         $paidExamsCount = DB::table('exams')->where('plan', 1)->count();
         $freeExamsCount = DB::table('exams')->where('plan', 0)->count();
-        $packagesWithFreeExams = DB::table('packages')
-            ->select('packages.id', 'packages.exam_id')
-            ->get();
-        $packageData = [];
-        foreach ($packagesWithFreeExams as $package) {
-            $packageId = $package->id;
-            $examIds = explode(',', $package->exam_id);
-            $freeExamsCountForPackage = DB::table('exams')
-                ->whereIn('id', $examIds)
-                ->where('plan', 0)
-                ->count();
-            $packageData[$packageId] = [
-                'exam_ids' => $examIds,
-                'free_exams_count' => $freeExamsCountForPackage
-            ];
-        }
-        $totalFreeExamsCountInPackages = 0;
-        foreach ($packageData as $package) {
-            $totalFreeExamsCountInPackages += $package['free_exams_count'];
-        }
-        $totalFreeExamsNotInPackages = $freeExamsCount - $totalFreeExamsCountInPackages;
 
         //Chart-5 Data
         $allStudents = DB::table('users')->where('is_admin', 0)->select('name as student_name')->get();
@@ -224,7 +223,7 @@ class AuthController extends Controller
             ->get();
 
         // Pass the data to your Blade view
-        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'totalFreeExamsNotInPackages', 'totalFreeExamsCountInPackages', 'allStudents', 'allExams', 'attemptData'));
+        return view('admin.dashboard', compact('subjectCount', 'examCount', 'packageCount', 'questionCount', 'examReviewedCount', 'studentCount', 'paymentCount', 'subjects', 'subjectsWithExamCount', 'chartData', 'reviewedCount', 'notReviewedCount', 'paidExamsCount', 'freeExamsCount', 'allStudents', 'allExams', 'attemptData'));
     }
 
     public function logout(Request $request)

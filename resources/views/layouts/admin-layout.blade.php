@@ -97,7 +97,11 @@
 							
 							<li class="nav-item dropdown  header-profile">
 								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
-									<img src="{{ asset('images/user.jpg') }}" width="56" alt="">
+									@if(Auth::user()->profile_pic)
+										<img src="{{ asset(Auth::user()->profile_pic) }}" alt="User Profile Image" style="max-width: 100%;">
+									@else
+										<img src="{{ asset('profile/default.png') }}" alt="Default User Image" style="max-width: 100%;">
+									@endif
 								</a>
 								<div class="dropdown-menu dropdown-menu-end">
 									<a href="/admin/profile" class="dropdown-item ai-icon">

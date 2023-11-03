@@ -368,8 +368,8 @@
 
 				//CHART-4 | EXAM PLANS
 				var options = {
-					series: [{{ $paidExamsCount }}, {{ $totalFreeExamsNotInPackages }}, {{ $totalFreeExamsCountInPackages }}],
-					labels: ['Paid Exams', 'Free Exams (Not in Package)', 'Free Exams (In a Package)'],
+					series: [{{ $paidExamsCount }}, {{ $freeExamsCount }}],
+					labels: ['Paid Exams', 'Free Exams'],
 					chart: {
 						type: 'donut',
 					},

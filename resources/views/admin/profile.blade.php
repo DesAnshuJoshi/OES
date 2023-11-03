@@ -16,10 +16,11 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xl-6">
-                                <form action="" id="profileUpdate">
+                                <form action="{{ route('editProfile') }}" id="profileUpdate" enctype="multipart/form-data">
+								@csrf
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Profile Image</strong></label>
-                                        <input type="file" class="form-file-input form-control pt-3" placeholder="Select your profile image">
+                                        <input type="file" name="profile_pic" class="" placeholder="Select your profile image">
                                     </div>
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Name</strong></label>
@@ -52,19 +53,28 @@
 
 
 <script>
-    $("#profileUpdate").submit(function(e){
-                e.preventDefault();
+    $(document).ready(function(){
+		$("#profileUpdate").submit(function(e){
+			e.preventDefault();
 
-                var formData = $(this).serialize();
+			var formData = $(this).serialize();
 
-                $.ajax({
-                    url:"",
-                    type:"POST",
-                    data: formData,
-                    success: function(data){
-                        console.log(data);
-                    }
-                });
-            });
+			$.ajax({
+				url:"{{ route('editProfile')}}",
+				type:"POST",
+				data: formData,
+				success: function(data){
+					if(data.success == true)
+					{
+						location.reload();
+					}
+					else
+					{
+						alert(data.msg);
+					}
+				}
+			});
+		});
+	});
 </script>
 @endsection
