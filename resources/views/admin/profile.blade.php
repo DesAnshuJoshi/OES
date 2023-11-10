@@ -20,7 +20,7 @@
 								@csrf
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Profile Image</strong></label>
-                                        <input type="file" name="profile_pic" class="" placeholder="Select your profile image">
+                                        <input type="file" name="profile_pic" id="profile_pic" class="form-file-input form-control">
                                     </div>
                                     <div class="mb-3">
                                         <label class="mb-1"><strong>Name</strong></label>

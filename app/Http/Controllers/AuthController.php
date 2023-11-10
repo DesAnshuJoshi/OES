@@ -111,55 +111,31 @@ class AuthController extends Controller
     }
 
     public function editProfile(Request $request)
-	{
-		try {
-			$user = Auth::user();
+    {
+        try {
+            $user = Auth::user();
 
-			// Define the basic validation rules
-			$rules = [
-				'name' => 'string|required|min:2',
-			];
+            // Check if a file is uploaded
+            if ($request->hasFile('profile_pic')) {
+                $uploadedFile = $request->file('profile_pic');
+                
+                // Get the original file name
+                $originalFileName = $uploadedFile->getClientOriginalName();
 
-			// Only add email and profile_pic validation if they are provided in the request
-			if ($request->has('email')) {
-				// Only apply the 'unique' rule if the email has changed
-				$rules['email'] = 'string|email|required|max:100|unique:users,email,' . $user->id;
-			}
+                Log::info('Uploaded File Name:', ['originalFileName' => $originalFileName]);
 
-			if ($request->hasFile('profile_pic')) {
-				$rules['profile_pic'] = 'image|mimes:jpeg,png,jpg,gif|max:8192';
-			}
+                // Continue with the rest of your code for processing the uploaded file.
+                // ...
+            }
 
-			$request->validate($rules);
+            // Rest of your code for updating user details
 
-			$user->name = $request->name;
+            return response()->json(['success' => true, 'msg' => "Profile Updated Successfully!"]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 
-			if ($request->has('email')) {
-				$user->email = $request->email;
-			}
-
-			if ($request->hasFile('profile_pic')) {
-				$profilePicPath = $request->file('profile_pic')->store('profile', 'public');
-				$user->profile_pic = $profilePicPath;
-				Log::info('Variable data:', ['profilePicPath' => $profilePicPath]);
-			}
-
-			// Ensure 'is_admin' remains '1' for admins
-			if ($user->is_admin) {
-				$user->is_admin = 1;
-			}
-
-			//$user->save();
-
-            Log::info('Hello World');
-
-
-
-			return response()->json(['success' => true, 'msg' => "Profile Updated Successfully!"]);
-		} catch (\Exception $e) {
-			return response()->json(['success' => false, 'msg' => $e->getMessage()]);
-		}
-	}
 
 
     public function adminDashboard()
